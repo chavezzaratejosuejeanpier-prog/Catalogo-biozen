@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SaludVital | Catálogo</title>
+    <title>BIOZEN | Tu Bienestar es Primero</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
@@ -12,8 +12,9 @@
         :root {
             --primary: #0F172A;
             --text-body: #334155;
-            --brand: #10B981; /* Verde */
-            --accent: #6366F1; /* Azul/Violeta */
+            --brand: #10B981; /* Verde Biozen */
+            --brand-dark: #047857;
+            --accent: #6366F1;
             --glass: rgba(255, 255, 255, 0.90);
             --radius: 24px;
             --shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
@@ -29,7 +30,7 @@
             min-height: 100vh;
         }
 
-        /* --- FONDO ANIMADO --- */
+        /* --- FONDO ANIMADO (Del diseño original) --- */
         .bg-animation {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden;
         }
@@ -53,23 +54,30 @@
             display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 4px 20px rgba(0,0,0,0.03);
         }
-        .brand { font-size: 1.6rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .brand { font-size: 1.8rem; font-weight: 800; color: var(--brand-dark); display: flex; align-items: center; gap: 8px; text-decoration: none; letter-spacing: -1px; }
         .brand i { color: var(--brand); }
 
         /* --- HERO --- */
-        .hero { text-align: center; padding: 3rem 1rem; }
-        .hero h1 { font-size: 2.8rem; font-weight: 800; line-height: 1.1; margin-bottom: 10px; }
-        .hero p { color: var(--text-body); font-size: 1.1rem; max-width: 500px; margin: 0 auto; }
+        .hero { text-align: center; padding: 4rem 1rem; }
+        .hero h1 { 
+            font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 10px; 
+            background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero p { 
+            color: var(--text-body); font-size: 1.2rem; max-width: 600px; margin: 0 auto; 
+            font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+        }
 
         /* --- FILTROS --- */
         .filters-wrap {
             display: flex; gap: 10px; padding: 0 5% 2rem; overflow-x: auto;
             justify-content: center; scrollbar-width: none;
         }
-        .filters-wrap::-webkit-scrollbar { display: none; } /* Ocultar barra scroll */
+        .filters-wrap::-webkit-scrollbar { display: none; }
         
         .filter-pill {
-            padding: 8px 20px; border-radius: 50px; background: white;
+            padding: 10px 24px; border-radius: 50px; background: white;
             border: 1px solid #e2e8f0; color: var(--text-body); font-weight: 600;
             cursor: pointer; white-space: nowrap; transition: 0.3s;
             box-shadow: 0 2px 10px rgba(0,0,0,0.03);
@@ -132,16 +140,54 @@
             border: none; cursor: pointer; font-size: 1.2rem;
         }
 
+        /* --- MODAL IZQUIERDA (CARRUSEL + ZOOM) --- */
         .modal-left {
-            flex: 1; background: #f8fafc; display: flex; align-items: center; justify-content: center; padding: 20px;
+            flex: 1; background: #f8fafc; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; padding: 20px; position: relative;
         }
-        .main-img { max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.15)); }
+
+        .main-img-container {
+            width: 100%; height: 75%; display: flex; align-items: center; justify-content: center; position: relative;
+        }
+        /* Cursor zoom-in para indicar funcionalidad */
+        .main-img { max-width: 90%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.15)); transition: 0.3s; cursor: zoom-in; }
+
+        .expand-icon {
+            position: absolute; bottom: 10px; right: 20px;
+            background: rgba(0,0,0,0.6); color: white; padding: 6px 12px; border-radius: 20px;
+            pointer-events: none; font-size: 0.8rem;
+        }
+
+        /* Flechas Carrusel */
+        .slider-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: white; width: 40px; height: 40px; border-radius: 50%;
+            border: 1px solid #eee; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); color: var(--brand); z-index: 10;
+            transition: 0.2s; opacity: 0;
+        }
+        .modal-left:hover .slider-btn { opacity: 1; }
+        .slider-btn:hover { background: var(--brand); color: white; }
+        .prev-btn { left: 15px; }
+        .next-btn { right: 15px; }
+
+        .thumbs-container {
+            width: 100%; height: 80px; display: flex; gap: 10px; 
+            justify-content: center; overflow-x: auto; margin-top: 10px;
+        }
+        .thumb {
+            width: 60px; height: 60px; border-radius: 10px; object-fit: cover;
+            cursor: pointer; border: 2px solid transparent; opacity: 0.6; background: white; transition: 0.2s;
+        }
+        .thumb.active, .thumb:hover { border-color: var(--brand); opacity: 1; transform: scale(1.05); }
+
 
         .modal-right { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; }
         .modal-title { font-size: 2.2rem; font-weight: 800; line-height: 1.1; margin-bottom: 10px; }
         .modal-desc { font-size: 1rem; color: var(--text-body); margin-bottom: 20px; }
+        .modal-price { font-size: 1.5rem; font-weight: 700; color: #444; margin-bottom: 15px; }
 
-        /* Acordeones con Scroll */
+        /* Acordeones */
         .acc-item { border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
         .acc-header {
             padding: 12px 15px; background: white; cursor: pointer; font-weight: 600;
@@ -154,9 +200,8 @@
         
         .scroll-content {
             padding: 15px; font-size: 0.9rem; color: var(--text-body); line-height: 1.6;
-            max-height: 150px; overflow-y: auto; /* La barrita mágica */
+            max-height: 150px; overflow-y: auto;
         }
-        /* Estilo barrita */
         .scroll-content::-webkit-scrollbar { width: 5px; }
         .scroll-content::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 
@@ -168,27 +213,41 @@
         }
         .btn-buy:hover { transform: scale(1.02); }
 
-        /* --- CHATBOT (Diseño Móvil Mejorado) --- */
+        /* --- BOTON FLOTANTE WHATSAPP --- */
+        .whatsapp-float {
+            position: fixed; bottom: 30px; left: 30px; width: 65px; height: 65px;
+            background: #25D366; color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+            z-index: 7000; transition: 0.3s; text-decoration: none;
+            animation: pulse-green 2s infinite;
+        }
+        .whatsapp-float:hover { transform: scale(1.1); }
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        /* --- CHATBOT --- */
         .chat-trigger {
-            position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px;
+            position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px;
             background: var(--primary); border-radius: 50%; color: white;
             display: flex; align-items: center; justify-content: center; font-size: 1.8rem;
             cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 6000;
-            animation: bounce 2s infinite;
+            transition: 0.3s; animation: float 3s ease-in-out infinite;
         }
-
         .chat-window {
-            position: fixed; bottom: 100px; right: 25px; width: 320px; height: 450px;
-            background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            z-index: 6000; display: none; flex-direction: column; overflow: hidden;
-            animation: slideUp 0.3s;
+            position: fixed; bottom: 110px; right: 30px; width: 340px;
+            background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            z-index: 6000; overflow: hidden; display: none; flex-direction: column;
+            border: 1px solid rgba(0,0,0,0.05);
         }
-
         .chat-header {
             background: var(--primary); color: white; padding: 15px; font-weight: 700;
             display: flex; justify-content: space-between; align-items: center;
         }
-        .chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #f8fafc; display: flex; flex-direction: column; gap: 10px; }
+        .chat-body { flex: 1; padding: 15px; height: 350px; overflow-y: auto; background: #f8fafc; display: flex; flex-direction: column; gap: 10px; }
         
         .msg { padding: 10px 14px; border-radius: 12px; font-size: 0.9rem; max-width: 85%; line-height: 1.4; }
         .msg.bot { background: white; color: var(--primary); border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
@@ -199,29 +258,41 @@
         .chat-send { background: var(--primary); color: white; width: 40px; border-radius: 50%; border: none; cursor: pointer; }
 
         .btn-specialist {
-            background: #25D366; color: white; border: none; padding: 8px 15px; 
-            border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; 
-            margin-top: 5px; display: inline-flex; align-items: center; gap: 5px;
+            background: #25D366; color: white; border: none; padding: 10px 20px; 
+            border-radius: 20px; font-size: 0.9rem; font-weight: 700; cursor: pointer; 
+            margin-top: 5px; display: inline-flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2); transition: 0.2s;
         }
+        .btn-specialist:hover { transform: scale(1.05); background: #1fae53; }
 
-        @keyframes float { 0% {transform:translate(0,0);} 100% {transform:translate(20px, 40px);} }
-        @keyframes bounce { 0%, 100% {transform:translateY(0);} 50% {transform:translateY(-10px);} }
-        @keyframes slideUp { from{transform:translateY(20px); opacity:0;} to{transform:translateY(0); opacity:1;} }
+        @keyframes float { 0%, 100% {transform:translateY(0);} 50% {transform:translateY(-10px);} }
+
+        /* --- ZOOM MODAL (FUNCIONALIDAD NUEVA) --- */
+        .zoom-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 5000; display: none;
+            justify-content: center; align-items: center;
+        }
+        .zoom-img { max-width: 95%; max-height: 95%; object-fit: contain; animation: zoomIn 0.3s; }
+        .close-zoom {
+            position: absolute; top: 20px; right: 20px; color: white; font-size: 2.5rem;
+            cursor: pointer; z-index: 5001; transition: 0.2s;
+        }
+        .close-zoom:hover { transform: scale(1.2); color: #ff5252; }
+        @keyframes zoomIn { from {transform: scale(0.8); opacity: 0;} to {transform: scale(1); opacity: 1;} }
 
         /* RESPONSIVE */
         @media(max-width: 768px) {
-            .filters-wrap { justify-content: flex-start; } /* Scroll horizontal en movil */
+            .filters-wrap { justify-content: flex-start; }
             .modal { flex-direction: column; height: 100%; border-radius: 0; width: 100%; }
-            .modal-left { height: 35vh; flex: none; padding: 10px; }
-            .modal-right { padding: 20px; padding-bottom: 120px; } /* Espacio para botón fijo */
+            .modal-left { height: 40vh; flex: none; padding: 10px; }
+            .slider-btn { opacity: 1; } /* Flechas siempre visibles en móvil */
+            .modal-right { padding: 20px; padding-bottom: 120px; } 
             .btn-buy { position: fixed; bottom: 20px; left: 5%; width: 90%; z-index: 5001; margin: 0; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
             
-            /* Chatbot en movil estilo "Hoja" */
-            .chat-window {
-                right: 0; bottom: 0; width: 100%; height: 60vh; 
-                border-radius: 20px 20px 0 0;
-            }
-            .chat-trigger { bottom: 85px; /* Encima del botón comprar */ }
+            .chat-window { right: 0; bottom: 0; width: 100%; height: 60vh; border-radius: 20px 20px 0 0; }
+            .chat-trigger { bottom: 85px; right: 20px; }
+            .whatsapp-float { bottom: 85px; left: 20px; } 
         }
     </style>
 </head>
@@ -234,13 +305,13 @@
     </div>
 
     <header>
-        <a href="#" class="brand"><i class="fas fa-leaf"></i> SaludVital</a>
+        <a href="#" class="brand"><i class="fas fa-leaf"></i> BIOZEN</a>
         <div style="font-size:1.2rem;"><i class="fas fa-shopping-bag"></i></div>
     </header>
 
     <section class="hero">
-        <h1>Bienestar <span style="color:var(--brand);">Premium</span></h1>
-        <p>Tecnología natural para tu mejor versión.</p>
+        <h1>BIOZEN</h1>
+        <p>TU BIENESTAR ES PRIMERO</p>
     </section>
 
     <div class="filters-wrap">
@@ -257,17 +328,28 @@
 
     <div class="grid" id="grid"></div>
 
+    <a href="https://wa.me/51972507949?text=Hola%20BIOZEN,%20quisiera%20m%C3%A1s%20informaci%C3%B3n." class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
     <div class="modal-overlay" id="modal-overlay">
         <div class="modal">
             <button class="close-modal" onclick="closeModal()"><i class="fas fa-times"></i></button>
             
             <div class="modal-left">
-                <img id="m-img" src="" class="main-img">
+                <div class="main-img-container">
+                    <button class="slider-btn prev-btn" onclick="prevImage()">❮</button>
+                    <img id="m-img" src="" class="main-img" onclick="expandImage()">
+                    <div class="expand-icon"><i class="fas fa-expand"></i> Ampliar</div>
+                    <button class="slider-btn next-btn" onclick="nextImage()">❯</button>
+                </div>
+                <div class="thumbs-container" id="m-gallery"></div>
             </div>
 
             <div class="modal-right">
                 <div style="background:#e0e7ff; color:var(--accent); padding:4px 12px; border-radius:6px; font-weight:700; font-size:0.7rem; width:fit-content; margin-bottom:10px;" id="m-cat">CATEGORÍA</div>
                 <h2 class="modal-title" id="m-title">Producto</h2>
+                <div class="modal-price" id="m-price">S/ 0.00</div>
                 <p class="modal-desc" id="m-short">Descripción...</p>
 
                 <div style="margin-bottom:20px;">
@@ -301,13 +383,18 @@
         </div>
     </div>
 
+    <div class="zoom-modal" id="zoom-modal">
+        <span class="close-zoom" onclick="closeZoom()">&times;</span>
+        <img class="zoom-img" id="zoom-img-target" src="">
+    </div>
+
     <div class="chat-trigger" onclick="toggleChat()">
         <i class="fas fa-comment-alt"></i>
     </div>
 
     <div class="chat-window" id="chat-window">
         <div class="chat-header">
-            <span><i class="fas fa-robot"></i> VitalBot</span>
+            <span><i class="fas fa-robot"></i> Asistente BIOZEN</span>
             <i class="fas fa-times" style="cursor:pointer;" onclick="toggleChat()"></i>
         </div>
         <div class="chat-body" id="chat-content">
@@ -319,23 +406,26 @@
     </div>
 
     <script>
-        // --- BASE DE DATOS EXACTA ---
+        // --- BASE DE DATOS EXACTA (Con Múltiples Imágenes) ---
         const products = [
-            { id: 1, title: "Prostate", cat: "Fertilidad", price: "S/150.00", short: "Defensas al máximo.", full: "• Aumenta el libido y la función sexual masculina.<br>• Mejora la fertilidad masculina.<br>• Aumenta la energia y el rendimiento físico.<br>• Reduce el riesgo de cáncer de próstata.", ing: "Maca, Ginseng panax, Huarnarpo macho saw palmetto, Achiote, Mashua,Vit C, Zinc", use: "2 cápsulas diarias", media: [{type: "img", src: "fotos/Prostate.jpg"}] },
-            { id: 2, title: "Colágeno Premiun", cat: "Articulaciones", price: "S/ 160.00", short: "Movilidad sin dolor.", full: "• Reduce la inflamación de articulaciones.<br>• Previene el desgaste articular.<br>• Ayuda a tratar osteoporosis y artritis.<br>• Fortalece huesos, uñas y cabello.", ing: "Colágeno Hidrolizado con vitamina C, Hojas de estevia, Magnesio y Sulfato de Zinc ", use: "Mezclar 10 gramos de colágeno en aproximadamente 200 mililitros de agua fría y consumir de inmediato 1 vez al día ", media: [{type: "img", src: "fotos/Colágeno.jpg"}] },
-            { id: 3, title: "Omega 3,6,9", cat: "Cardiovascular", price: "$50.00", short: "Corazón sano.", full: "• Contribuye a la salud del corazon y sistema cardiovascular.<br>• Apoya el buen funcioamiento del cerebro y la memoria.<br>• Reduce la inflamación y ayuda a aliviar dolores articulares.<br>• Mejora el perfil lipídico: ayuda a reducir triglicéridos y colesterol malo (LDL)", ing: "Aceite Sancha Inchi", use: "2 cápsulas diarias", media: [{type: "img", src: "fotos/Omega.jpg"}] },
-            { id: 4, title: "Creatina", cat: "Ejercicio", price: "$35.00", short: "Adiós estrés.", full: "• Aumenta la masa muscular magra.<br>• Mejora la fuerza y potencia física.<br>• Favorece la recuperación post-entrenamiento.<br>• Ayuda a reducir la fatiga durante el ejercicio", ing: "Monohidrato 100%", use: "Disolver el contenido de 1 cucharada dosificadora colmada (5g) de producto en agua o bebida favorita (200 ml o 7 onzas) y beber de inmediato", media: [{type: "img", src: "fotos/Creatina.jpg"}] },
-            { id: 5, title: "Detox Fit", cat: "Digestión", price: "S/160.00", short: "Sol en gotas.", full: "• Limpieza profunda del organismo.<br>• Mejora del tránsito intestinal.<br>• Aumento de la energía.<br>• Reducción del colesterol.", ing: "Garcinia gambogia , Tamarindo, Penca de tuna, Aloe vera, Café verde, Higo, Almidon de maíz hidrolizado y Magnesio", use: "Disolver el contenido de 1 cuchara dosificadora colmada (aprox 10 g) de producto en agua o bebida favorita (200ml) y beber de inmediato.", media: [{type: "img", src: "fotos/Detox.jpg"}] },
-            { id: 6, title: "BioEnergy", cat: "Energia", price: "S/160.00", short: "Flora feliz.", full: "• Fortalecimiento del sistema inmunitario.<br>• Aporta vitaminas y minerales esenciales.<br>• Mejora de la circulación sanguínea.<br>• Mejora la recuperación muscular", ing: "Maca, Acai berry, guaraná algarrobo, Arandano, Camu Camu, Vitaminas A, E, C, B1, B2, B6, B12", use: "Mezclar el contenido de un stick del producto en 200 ml de agua fria y beber inmediato", media: [{type: "img", src: "fotos/Bioenergy.jpg"}] },
+            { id: 1, title: "Prostate", cat: "Fertilidad", price: "S/150.00", short: "Defensas al máximo.", full: "• Aumenta el libido y la función sexual masculina.<br>• Mejora la fertilidad masculina.<br>• Aumenta la energia y el rendimiento físico.<br>• Reduce el riesgo de cáncer de próstata.", ing: "Maca, Ginseng panax, Huarnarpo macho saw palmetto, Achiote, Mashua,Vit C, Zinc", use: "2 cápsulas diarias", media: [{type: "img", src: "fotos/Prostate1.jpeg"}, {type: "img", src: "fotos/Prostate2.jpeg"}] },
+            { id: 2, title: "Colágeno Premiun", cat: "Articulaciones", price: "S/ 160.00", short: "Movilidad sin dolor.", full: "• Reduce la inflamación de articulaciones.<br>• Previene el desgaste articular.<br>• Ayuda a tratar osteoporosis y artritis.<br>• Fortalece huesos, uñas y cabello.", ing: "Colágeno Hidrolizado con vitamina C, Hojas de estevia, Magnesio y Sulfato de Zinc ", use: "Mezclar 10 gramos de colágeno en aproximadamente 200 mililitros de agua fría y consumir de inmediato 1 vez al día ", media: [{type: "img", src: "fotos/Colageno1.jpeg"}, {type: "img", src: "fotos/Colageno2jpeg.jpeg"}] },
+            { id: 3, title: "Omega 3,6,9", cat: "Cardiovascular", price: "$50.00", short: "Corazón sano.", full: "• Contribuye a la salud del corazon y sistema cardiovascular.<br>• Apoya el buen funcioamiento del cerebro y la memoria.<br>• Reduce la inflamación y ayuda a aliviar dolores articulares.<br>• Mejora el perfil lipídico: ayuda a reducir triglicéridos y colesterol malo (LDL)", ing: "Aceite Sancha Inchi", use: "2 cápsulas diarias", media: [{type: "img", src: "fotos/Omega1.jpeg"}, {type: "img", src: "fotos/Omega2.jpeg"}, {type: "img", src: "fotos/Omega3.jpeg"}] },
+            { id: 4, title: "Creatina", cat: "Ejercicio", price: "$35.00", short: "Adiós estrés.", full: "• Aumenta la masa muscular magra.<br>• Mejora la fuerza y potencia física.<br>• Favorece la recuperación post-entrenamiento.<br>• Ayuda a reducir la fatiga durante el ejercicio", ing: "Monohidrato 100%", use: "Disolver el contenido de 1 cucharada dosificadora colmada (5g) de producto en agua o bebida favorita (200 ml o 7 onzas) y beber de inmediato", media: [{type: "img", src: "fotos/Creatina1.jpeg"}, {type: "img", src: "fotos/Creatina2.jpeg"}, {type: "img", src: "fotos/Creatina3.jpeg"}] },
+            { id: 5, title: "Detox Fit", cat: "Digestión", price: "S/160.00", short: "Sol en gotas.", full: "• Limpieza profunda del organismo.<br>• Mejora del tránsito intestinal.<br>• Aumento de la energía.<br>• Reducción del colesterol.", ing: "Garcinia gambogia , Tamarindo, Penca de tuna, Aloe vera, Café verde, Higo, Almidon de maíz hidrolizado y Magnesio", use: "Disolver el contenido de 1 cuchara dosificadora colmada (aprox 10 g) de producto en agua o bebida favorita (200ml) y beber de inmediato.", media: [{type: "img", src: "fotos/Detox Fix1.jpeg"}, {type: "img", src: "fotos/Detox Fix2.jpeg"}] },
+            { id: 6, title: "BioEnergy", cat: "Energia", price: "S/160.00", short: "Flora feliz.", full: "• Fortalecimiento del sistema inmunitario.<br>• Aporta vitaminas y minerales esenciales.<br>• Mejora de la circulación sanguínea.<br>• Mejora la recuperación muscular", ing: "Maca, Acai berry, guaraná algarrobo, Arandano, Camu Camu, Vitaminas A, E, C, B1, B2, B6, B12", use: "Mezclar el contenido de un stick del producto en 200 ml de agua fria y beber inmediato", media: [{type: "img", src: "fotos/BionEnergy1.jpeg"}, {type: "img", src: "fotos/BionEnergy2.jpeg"}] },
             { id: 7, title: "GanoGreen", cat: "Detox", price: "S/160.00", short: "Energía.", full: "• Cuidado de la piel, huesos y articulaciones.<br>• Soporte metabolico y mental con vitaminas del complejoB.<br>• Reducción de colesterol.<br>• Ayuda a combatir el cancer.", ing: "Ganoderma, Café, Espirulina Moringa, Calostro bovino, Aceite de almendras, Aceite de coco Aceite de sacha inchi, Stevia, Vitaminas A, D3, C, B1, B2 Y B6", use: "Mezclar el contenido de un sticks del producto en 200 ml aproximadamente de agua tibia o caliente y beber de inmediato.", media: [{type: "img", src: "fotos/GanoGreen1.png"}, {type: "img", src: "fotos/GanoGreen2.png"}] },
-            { id: 8, title: "FloraInts", cat: "Huesos", price: "$38.00", short: "Fuerza natural.", full: "• Reduce la inflamación de articulaciones.<br>• Previene el desgaste articular.<br>• Ayuda a tratar osteoporosis y artritis.<br>• Fortalece huesos, uñas y cabello.", ing: "Calcio Coral", use: "2 con cena", media: [{type: "img", src: "fotos/Floraints.jpg"}] }
+            { id: 8, title: "FloraInts", cat: "Digestion", price: "$38.00", short: "Fuerza natural.", full: "• Reducción de la inflamación gastrica.<br>• Mejora de la absorcioón de nurtrientes.<br>• Alivio del estriñimiento.<br>• Protección de la muscosa gástrica.", ing: "Aloe vera, Arroz, Yacón, 7 Cepas Cultivos Probioticos, Aguaymanto, Vitaminas A, C, D, B1, B2, B6, Magnesio, Zinc, Fosforo, Potasio.", use: "Mezclar el contenido de un sticks del producto en 200 ml aproximadamente de agua tibia o caliente y beber de inmediato.", media: [{type: "img", src: "fotos/Floraints1.jpeg"}] }
         ];
 
         const grid = document.getElementById('grid');
         const modal = document.getElementById('modal-overlay');
-        let currentChatProduct = null; // Para saber de qué producto habla el bot
+        const zoomModal = document.getElementById('zoom-modal');
+        let currentChatProduct = null;
+        let currentImgIndex = 0;
+        let autoSlideTimer = null;
 
-        // Renderizado
+        // Renderizado Inicial
         function render(list = products) {
             grid.innerHTML = list.map((p, i) => `
                 <div class="card" onclick="openModal(${p.id})" style="animation-delay: ${i*0.05}s">
@@ -345,6 +435,7 @@
                     <div class="card-info">
                         <span class="card-cat">${p.cat}</span>
                         <h3 class="card-title">${p.title}</h3>
+                        <p style="font-weight:bold; color:#444;">${p.price}</p>
                         <div class="card-btn"><i class="fas fa-arrow-right"></i></div>
                     </div>
                 </div>
@@ -358,29 +449,38 @@
             render(cat === 'all' ? products : products.filter(p => p.cat === cat));
         }
 
-        // Modal
+        // --- LÓGICA MODAL PRODUCTO ---
         function openModal(id) {
             const p = products.find(prod => prod.id === id);
             if(!p) return;
-            currentChatProduct = p; // Guardamos producto para el bot
-
+            
+            // 1. Configurar datos visuales
+            currentChatProduct = p; 
+            currentImgIndex = 0;
+            
             document.getElementById('m-title').innerText = p.title;
             document.getElementById('m-cat').innerText = p.cat;
+            document.getElementById('m-price').innerText = p.price;
             document.getElementById('m-short').innerText = p.short;
             document.getElementById('m-full').innerHTML = p.full;
             document.getElementById('m-ing').innerText = p.ing;
             document.getElementById('m-use').innerText = p.use;
-            document.getElementById('m-img').src = p.media[0].src;
+            
+            updateGallery();
+            startAutoSlide();
+
+            // 2. REINICIAR CHAT CADA VEZ QUE ABRES UN PRODUCTO
+            resetChatUI(p);
 
             modal.style.display = 'flex';
             setTimeout(() => modal.classList.add('active'), 10);
-            
-            // REINICIAR Y ACTIVAR CHATBOT AL ABRIR PRODUCTO
-            resetChat();
         }
 
         function closeModal() {
             modal.classList.remove('active');
+            stopAutoSlide();
+            // Al salir, el chat olvida el producto específico
+            currentChatProduct = null; 
             setTimeout(() => modal.style.display = 'none', 300);
         }
 
@@ -392,29 +492,82 @@
             window.open(`https://wa.me/51972507949?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
+        // --- CARRUSEL E IMÁGENES ---
+        function updateGallery() {
+            const p = currentChatProduct;
+            const mainImg = document.getElementById('m-img');
+            const gallery = document.getElementById('m-gallery');
+            
+            // Animación fade
+            mainImg.style.opacity = 0;
+            setTimeout(() => {
+                mainImg.src = p.media[currentImgIndex].src;
+                mainImg.style.opacity = 1;
+            }, 150);
+
+            // Generar miniaturas
+            gallery.innerHTML = '';
+            p.media.forEach((m, i) => {
+                const img = document.createElement('img');
+                img.src = m.src;
+                img.className = `thumb ${i === currentImgIndex ? 'active' : ''}`;
+                img.onclick = () => {
+                    currentImgIndex = i;
+                    updateGallery();
+                    resetAutoSlide();
+                };
+                gallery.appendChild(img);
+            });
+        }
+
+        function nextImage() {
+            if(!currentChatProduct) return;
+            currentImgIndex = (currentImgIndex + 1) % currentChatProduct.media.length;
+            updateGallery();
+            resetAutoSlide();
+        }
+
+        function prevImage() {
+            if(!currentChatProduct) return;
+            currentImgIndex = (currentImgIndex - 1 + currentChatProduct.media.length) % currentChatProduct.media.length;
+            updateGallery();
+            resetAutoSlide();
+        }
+
+        function startAutoSlide() {
+            if(currentChatProduct && currentChatProduct.media.length > 1) {
+                autoSlideTimer = setInterval(() => {
+                    currentImgIndex = (currentImgIndex + 1) % currentChatProduct.media.length;
+                    updateGallery();
+                }, 3000);
+            }
+        }
+        function stopAutoSlide() { clearInterval(autoSlideTimer); }
+        function resetAutoSlide() { stopAutoSlide(); startAutoSlide(); }
+
+        // --- FUNCIÓN ZOOM (EXPANDIR) ---
+        function expandImage() {
+            const currentSrc = document.getElementById('m-img').src;
+            document.getElementById('zoom-img-target').src = currentSrc;
+            zoomModal.style.display = 'flex';
+        }
+        function closeZoom() { zoomModal.style.display = 'none'; }
+
+
         // --- LÓGICA CHATBOT ---
         function toggleChat() {
             const chat = document.getElementById('chat-window');
             chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        function resetChat() {
-            const chatBody = document.getElementById('chat-content');
-            const chatWin = document.getElementById('chat-window');
-            
-            // Abrir chat automáticamente (opcional, o solo reiniciarlo)
-            // chatWin.style.display = 'flex'; 
-
-            if(currentChatProduct) {
-                chatBody.innerHTML = `
-                    <div class="msg bot">
-                        ¡Hola! Estás viendo <b>${currentChatProduct.title}</b>. 🌿<br>
-                        Es excelente para <b>${currentChatProduct.cat}</b>. ¿Te gustaría saber por qué es tan recomendado? 😊
-                    </div>
-                `;
-            } else {
-                chatBody.innerHTML = `<div class="msg bot">¡Hola! Soy VitalBot. Selecciona un producto para contarte más sobre él.</div>`;
-            }
+        function resetChatUI(product) {
+            const content = document.getElementById('chat-content');
+            content.innerHTML = `
+                <div class="msg bot">
+                    Hola 👋. Veo que te interesa <b>${product.title}</b>.<br>
+                    Puedo hablarte de sus beneficios, precio o dosis. ¿Qué deseas saber?
+                </div>
+            `;
         }
 
         function handleEnter(e) { if(e.key === 'Enter') sendMessage(); }
@@ -426,36 +579,32 @@
             
             if(!text) return;
 
-            // Mensaje usuario
             chatBody.innerHTML += `<div class="msg user">${input.value}</div>`;
             input.value = '';
             chatBody.scrollTop = chatBody.scrollHeight;
 
-            // Respuesta Bot
             setTimeout(() => {
                 let reply = "";
                 const p = currentChatProduct;
 
                 if (!p) {
-                    reply = "Por favor, abre un producto para poder asesorarte mejor.";
+                    reply = "Por favor, selecciona un producto para poder ayudarte mejor.";
                 } else {
-                    if(text.includes('por que') || text.includes('recomiendas') || text.includes('bueno')) {
-                        reply = `Te recomiendo <b>${p.title}</b> porque su fórmula natural actúa directamente en el problema. Clientes reportan mejoras en las primeras semanas. ¡Es una inversión en tu salud! 💪`;
-                    } 
-                    else if(text.includes('precio') || text.includes('costo')) {
-                        reply = `Tenemos una oferta especial para ${p.title} si compras hoy. Dale clic al botón "Comprar por WhatsApp" para asegurarla. 🎁`;
-                    }
-                    else if(text.includes('envio') || text.includes('delivery')) {
-                        reply = "Hacemos envíos a todo el país. Escríbenos para coordinar tu entrega lo antes posible. 🚚";
-                    }
-                    else if(text.includes('duda') || text.includes('consulta') || text.includes('pregunta')) {
-                        reply = `Entiendo, para consultas específicas te conectaré con nuestra especialista humana ahora mismo.<br>
+                    // Lógica DETECTAR INTENCIÓN DE CONTACTO
+                    if(text.includes('informacion') || text.includes('info') || text.includes('mas') || text.includes('detalle') || text.includes('saber mas') || text.includes('algo mas') || text.includes('duda')) {
+                        reply = `Para brindarte información completa y personalizada, ¿te parece si te derivo con la encargada directamente? Ella te atenderá con gusto. 👇<br>
                         <button class="btn-specialist" onclick="contactSpecialist()">
-                            <i class="fab fa-whatsapp"></i> Contactar Especialista
+                            <i class="fab fa-whatsapp"></i> Contactar a la Encargada
                         </button>`;
                     }
+                    else if(text.includes('precio') || text.includes('costo')) {
+                        reply = `¡Tenemos una oferta especial hoy! Dale clic al botón "Comprar por WhatsApp" para confirmarte el precio promocional. 🎁`;
+                    }
+                    else if(text.includes('por que') || text.includes('recomiendas') || text.includes('bueno')) {
+                        reply = `Te recomiendo <b>${p.title}</b> porque su fórmula natural ataca la raíz del problema. ¡Muchos clientes han mejorado su calidad de vida! 🌟`;
+                    }
                     else {
-                        reply = `El <b>${p.title}</b> es fantástico. Principalmente ayuda a: <br><i>${p.short}</i>.<br>¿Te animas a probarlo?`;
+                        reply = `El <b>${p.title}</b> ayuda principalmente a: <br><i>${p.short}</i>.<br>¿Te gustaría probarlo?`;
                     }
                 }
 
@@ -465,10 +614,15 @@
         }
 
         function contactSpecialist() {
-            window.open(`https://wa.me/51972507949?text=Hola, tengo una consulta específica sobre ${currentChatProduct ? currentChatProduct.title : 'sus productos'}.`, '_blank');
+            const prodName = currentChatProduct ? currentChatProduct.title : "sus productos";
+            window.open(`https://wa.me/51972507949?text=Hola, quisiera más información detallada sobre ${prodName}, por favor.`, '_blank');
         }
 
-        // Iniciar
+        window.onclick = (e) => { 
+            if(e.target == modal) closeModal(); 
+            if(e.target == zoomModal) closeZoom();
+        }
+
         render();
     </script>
 </body>
