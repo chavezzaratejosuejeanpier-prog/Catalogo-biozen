@@ -12,7 +12,7 @@
         :root {
             --primary: #0F172A;
             --text-body: #334155;
-            --brand: #10B981; /* Verde Biozen */
+            --brand: #10B981;
             --brand-dark: #047857;
             --accent: #6366F1;
             --glass: rgba(255, 255, 255, 0.90);
@@ -30,7 +30,7 @@
             min-height: 100vh;
         }
 
-        /* --- FONDO ANIMADO (Del diseño original) --- */
+        /* --- FONDO ANIMADO --- */
         .bg-animation {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden;
         }
@@ -140,7 +140,6 @@
             border: none; cursor: pointer; font-size: 1.2rem;
         }
 
-        /* --- MODAL IZQUIERDA (CARRUSEL + ZOOM) --- */
         .modal-left {
             flex: 1; background: #f8fafc; display: flex; flex-direction: column;
             align-items: center; justify-content: center; padding: 20px; position: relative;
@@ -149,13 +148,13 @@
         .main-img-container {
             width: 100%; height: 75%; display: flex; align-items: center; justify-content: center; position: relative;
         }
-        /* Cursor zoom-in para indicar funcionalidad */
-        .main-img { max-width: 90%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.15)); transition: 0.3s; cursor: zoom-in; }
+        
+        .main-img { max-width: 90%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.15)); transition: 0.3s; cursor: pointer; }
 
         .expand-icon {
             position: absolute; bottom: 10px; right: 20px;
             background: rgba(0,0,0,0.6); color: white; padding: 6px 12px; border-radius: 20px;
-            pointer-events: none; font-size: 0.8rem;
+            pointer-events: none; font-size: 0.8rem; display: flex; align-items: center; gap: 5px;
         }
 
         /* Flechas Carrusel */
@@ -181,11 +180,9 @@
         }
         .thumb.active, .thumb:hover { border-color: var(--brand); opacity: 1; transform: scale(1.05); }
 
-
         .modal-right { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; }
         .modal-title { font-size: 2.2rem; font-weight: 800; line-height: 1.1; margin-bottom: 10px; }
         .modal-desc { font-size: 1rem; color: var(--text-body); margin-bottom: 20px; }
-        .modal-price { font-size: 1.5rem; font-weight: 700; color: #444; margin-bottom: 15px; }
 
         /* Acordeones */
         .acc-item { border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
@@ -213,21 +210,33 @@
         }
         .btn-buy:hover { transform: scale(1.02); }
 
-        /* --- BOTON FLOTANTE WHATSAPP --- */
-        .whatsapp-float {
-            position: fixed; bottom: 30px; left: 30px; width: 65px; height: 65px;
-            background: #25D366; color: white; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2.2rem; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
-            z-index: 7000; transition: 0.3s; text-decoration: none;
-            animation: pulse-green 2s infinite;
+        /* --- SUPER ZOOM MODAL --- */
+        .zoom-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 5000; display: none;
+            justify-content: center; align-items: center; overflow: auto;
         }
-        .whatsapp-float:hover { transform: scale(1.1); }
-        @keyframes pulse-green {
-            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        .zoom-img-wrapper {
+            width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;
+            overflow: auto; /* Permite scroll si la imagen es gigante */
         }
+        .zoom-img { 
+            max-width: 90%; max-height: 90%; object-fit: contain; 
+            transition: transform 0.3s ease; cursor: zoom-in;
+        }
+        
+        /* ESTADO ACTIVO DEL ZOOM */
+        .zoom-img.active-zoom {
+            transform: scale(2.5); /* Aumenta el tamaño 2.5 veces */
+            cursor: zoom-out;
+            max-width: none; max-height: none; /* Rompe los límites para permitir scroll */
+        }
+
+        .close-zoom {
+            position: fixed; top: 20px; right: 20px; color: white; font-size: 2.5rem;
+            cursor: pointer; z-index: 5001; transition: 0.2s;
+        }
+        .close-zoom:hover { transform: scale(1.2); color: #ff5252; }
 
         /* --- CHATBOT --- */
         .chat-trigger {
@@ -267,32 +276,17 @@
 
         @keyframes float { 0%, 100% {transform:translateY(0);} 50% {transform:translateY(-10px);} }
 
-        /* --- ZOOM MODAL (FUNCIONALIDAD NUEVA) --- */
-        .zoom-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 5000; display: none;
-            justify-content: center; align-items: center;
-        }
-        .zoom-img { max-width: 95%; max-height: 95%; object-fit: contain; animation: zoomIn 0.3s; }
-        .close-zoom {
-            position: absolute; top: 20px; right: 20px; color: white; font-size: 2.5rem;
-            cursor: pointer; z-index: 5001; transition: 0.2s;
-        }
-        .close-zoom:hover { transform: scale(1.2); color: #ff5252; }
-        @keyframes zoomIn { from {transform: scale(0.8); opacity: 0;} to {transform: scale(1); opacity: 1;} }
-
         /* RESPONSIVE */
         @media(max-width: 768px) {
             .filters-wrap { justify-content: flex-start; }
             .modal { flex-direction: column; height: 100%; border-radius: 0; width: 100%; }
             .modal-left { height: 40vh; flex: none; padding: 10px; }
-            .slider-btn { opacity: 1; } /* Flechas siempre visibles en móvil */
+            .slider-btn { opacity: 1; } /* Flechas siempre visibles */
             .modal-right { padding: 20px; padding-bottom: 120px; } 
             .btn-buy { position: fixed; bottom: 20px; left: 5%; width: 90%; z-index: 5001; margin: 0; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
             
             .chat-window { right: 0; bottom: 0; width: 100%; height: 60vh; border-radius: 20px 20px 0 0; }
             .chat-trigger { bottom: 85px; right: 20px; }
-            .whatsapp-float { bottom: 85px; left: 20px; } 
         }
     </style>
 </head>
@@ -328,10 +322,6 @@
 
     <div class="grid" id="grid"></div>
 
-    <a href="https://wa.me/51972507949?text=Hola%20BIOZEN,%20quisiera%20m%C3%A1s%20informaci%C3%B3n." class="whatsapp-float" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
     <div class="modal-overlay" id="modal-overlay">
         <div class="modal">
             <button class="close-modal" onclick="closeModal()"><i class="fas fa-times"></i></button>
@@ -340,7 +330,7 @@
                 <div class="main-img-container">
                     <button class="slider-btn prev-btn" onclick="prevImage()">❮</button>
                     <img id="m-img" src="" class="main-img" onclick="expandImage()">
-                    <div class="expand-icon"><i class="fas fa-expand"></i> Ampliar</div>
+                    <div class="expand-icon"><i class="fas fa-expand"></i> Toca para ampliar</div>
                     <button class="slider-btn next-btn" onclick="nextImage()">❯</button>
                 </div>
                 <div class="thumbs-container" id="m-gallery"></div>
@@ -349,7 +339,6 @@
             <div class="modal-right">
                 <div style="background:#e0e7ff; color:var(--accent); padding:4px 12px; border-radius:6px; font-weight:700; font-size:0.7rem; width:fit-content; margin-bottom:10px;" id="m-cat">CATEGORÍA</div>
                 <h2 class="modal-title" id="m-title">Producto</h2>
-                <div class="modal-price" id="m-price">S/ 0.00</div>
                 <p class="modal-desc" id="m-short">Descripción...</p>
 
                 <div style="margin-bottom:20px;">
@@ -385,7 +374,9 @@
 
     <div class="zoom-modal" id="zoom-modal">
         <span class="close-zoom" onclick="closeZoom()">&times;</span>
-        <img class="zoom-img" id="zoom-img-target" src="">
+        <div class="zoom-img-wrapper" onclick="closeZoom()">
+            <img class="zoom-img" id="zoom-img-target" src="" onclick="event.stopPropagation(); toggleZoomScale()">
+        </div>
     </div>
 
     <div class="chat-trigger" onclick="toggleChat()">
@@ -397,8 +388,7 @@
             <span><i class="fas fa-robot"></i> Asistente BIOZEN</span>
             <i class="fas fa-times" style="cursor:pointer;" onclick="toggleChat()"></i>
         </div>
-        <div class="chat-body" id="chat-content">
-            </div>
+        <div class="chat-body" id="chat-content"></div>
         <div class="chat-input-box">
             <input type="text" id="chat-input" placeholder="Pregunta algo..." onkeypress="handleEnter(event)">
             <button class="chat-send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
@@ -406,7 +396,6 @@
     </div>
 
     <script>
-        // --- BASE DE DATOS EXACTA (Con Múltiples Imágenes) ---
         const products = [
             { id: 1, title: "Prostate", cat: "Fertilidad", price: "S/150.00", short: "Defensas al máximo.", full: "• Aumenta el libido y la función sexual masculina.<br>• Mejora la fertilidad masculina.<br>• Aumenta la energia y el rendimiento físico.<br>• Reduce el riesgo de cáncer de próstata.", ing: "Maca, Ginseng panax, Huarnarpo macho saw palmetto, Achiote, Mashua,Vit C, Zinc", use: "2 cápsulas diarias", media: [{type: "img", src: "fotos/Prostate1.jpeg"}, {type: "img", src: "fotos/Prostate2.jpeg"}] },
             { id: 2, title: "Colágeno Premiun", cat: "Articulaciones", price: "S/ 160.00", short: "Movilidad sin dolor.", full: "• Reduce la inflamación de articulaciones.<br>• Previene el desgaste articular.<br>• Ayuda a tratar osteoporosis y artritis.<br>• Fortalece huesos, uñas y cabello.", ing: "Colágeno Hidrolizado con vitamina C, Hojas de estevia, Magnesio y Sulfato de Zinc ", use: "Mezclar 10 gramos de colágeno en aproximadamente 200 mililitros de agua fría y consumir de inmediato 1 vez al día ", media: [{type: "img", src: "fotos/Colageno1.jpeg"}, {type: "img", src: "fotos/Colageno2jpeg.jpeg"}] },
@@ -425,7 +414,6 @@
         let currentImgIndex = 0;
         let autoSlideTimer = null;
 
-        // Renderizado Inicial
         function render(list = products) {
             grid.innerHTML = list.map((p, i) => `
                 <div class="card" onclick="openModal(${p.id})" style="animation-delay: ${i*0.05}s">
@@ -435,32 +423,28 @@
                     <div class="card-info">
                         <span class="card-cat">${p.cat}</span>
                         <h3 class="card-title">${p.title}</h3>
-                        <p style="font-weight:bold; color:#444;">${p.price}</p>
                         <div class="card-btn"><i class="fas fa-arrow-right"></i></div>
                     </div>
                 </div>
             `).join('');
         }
 
-        // Filtros
         function filter(cat, btn) {
             document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             render(cat === 'all' ? products : products.filter(p => p.cat === cat));
         }
 
-        // --- LÓGICA MODAL PRODUCTO ---
         function openModal(id) {
             const p = products.find(prod => prod.id === id);
             if(!p) return;
             
-            // 1. Configurar datos visuales
             currentChatProduct = p; 
             currentImgIndex = 0;
             
             document.getElementById('m-title').innerText = p.title;
             document.getElementById('m-cat').innerText = p.cat;
-            document.getElementById('m-price').innerText = p.price;
+            // PRECIO ELIMINADO
             document.getElementById('m-short').innerText = p.short;
             document.getElementById('m-full').innerHTML = p.full;
             document.getElementById('m-ing').innerText = p.ing;
@@ -468,8 +452,6 @@
             
             updateGallery();
             startAutoSlide();
-
-            // 2. REINICIAR CHAT CADA VEZ QUE ABRES UN PRODUCTO
             resetChatUI(p);
 
             modal.style.display = 'flex';
@@ -479,7 +461,6 @@
         function closeModal() {
             modal.classList.remove('active');
             stopAutoSlide();
-            // Al salir, el chat olvida el producto específico
             currentChatProduct = null; 
             setTimeout(() => modal.style.display = 'none', 300);
         }
@@ -492,20 +473,17 @@
             window.open(`https://wa.me/51972507949?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // --- CARRUSEL E IMÁGENES ---
         function updateGallery() {
             const p = currentChatProduct;
             const mainImg = document.getElementById('m-img');
             const gallery = document.getElementById('m-gallery');
             
-            // Animación fade
             mainImg.style.opacity = 0;
             setTimeout(() => {
                 mainImg.src = p.media[currentImgIndex].src;
                 mainImg.style.opacity = 1;
             }, 150);
 
-            // Generar miniaturas
             gallery.innerHTML = '';
             p.media.forEach((m, i) => {
                 const img = document.createElement('img');
@@ -545,16 +523,24 @@
         function stopAutoSlide() { clearInterval(autoSlideTimer); }
         function resetAutoSlide() { stopAutoSlide(); startAutoSlide(); }
 
-        // --- FUNCIÓN ZOOM (EXPANDIR) ---
+        // --- SUPER ZOOM LOGIC ---
         function expandImage() {
             const currentSrc = document.getElementById('m-img').src;
-            document.getElementById('zoom-img-target').src = currentSrc;
+            const zoomTarget = document.getElementById('zoom-img-target');
+            zoomTarget.src = currentSrc;
+            zoomTarget.classList.remove('active-zoom'); // Reiniciar estado
             zoomModal.style.display = 'flex';
         }
+        
         function closeZoom() { zoomModal.style.display = 'none'; }
 
+        // Función para alternar el zoom dentro del modal
+        function toggleZoomScale() {
+            const img = document.getElementById('zoom-img-target');
+            img.classList.toggle('active-zoom');
+        }
 
-        // --- LÓGICA CHATBOT ---
+        // --- CHATBOT ---
         function toggleChat() {
             const chat = document.getElementById('chat-window');
             chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
@@ -565,7 +551,7 @@
             content.innerHTML = `
                 <div class="msg bot">
                     Hola 👋. Veo que te interesa <b>${product.title}</b>.<br>
-                    Puedo hablarte de sus beneficios, precio o dosis. ¿Qué deseas saber?
+                    Puedo hablarte de sus beneficios, dosis o si prefieres, contactar a la encargada.
                 </div>
             `;
         }
@@ -590,7 +576,6 @@
                 if (!p) {
                     reply = "Por favor, selecciona un producto para poder ayudarte mejor.";
                 } else {
-                    // Lógica DETECTAR INTENCIÓN DE CONTACTO
                     if(text.includes('informacion') || text.includes('info') || text.includes('mas') || text.includes('detalle') || text.includes('saber mas') || text.includes('algo mas') || text.includes('duda')) {
                         reply = `Para brindarte información completa y personalizada, ¿te parece si te derivo con la encargada directamente? Ella te atenderá con gusto. 👇<br>
                         <button class="btn-specialist" onclick="contactSpecialist()">
