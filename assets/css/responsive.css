@@ -1,0 +1,1400 @@
+/* ============================================================
+   RESPONSIVE STYLES — BIOZEN Landing Page
+   Mobile-first enhancements for all breakpoints
+   ============================================================ */
+
+/* ===== 1440px ===== */
+@media (max-width: 1440px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+/* ===== 1024px ===== */
+@media (max-width: 1024px) {
+  .hero-title {
+    font-size: 3rem;
+  }
+  .hero-section {
+    min-height: auto;
+    padding: 5rem 0 3rem;
+  }
+  .hero-image-wrapper {
+    margin-top: 2rem;
+    min-height: 350px;
+  }
+  .section-title {
+    font-size: 2rem;
+  }
+  .section-subtitle {
+    font-size: 1.05rem;
+  }
+  .cta-title {
+    font-size: 2rem;
+  }
+  .cta-text {
+    font-size: 1rem;
+  }
+  .gallery-main-img {
+    height: 360px;
+  }
+  .gallery-modal .modal-body .col-lg-5 {
+    max-height: 360px;
+  }
+  .product-card-img {
+    height: 240px;
+  }
+  .benefit-card {
+    padding: 1.75rem 1.25rem;
+  }
+  .footer-text {
+    max-width: 100%;
+  }
+}
+
+/* ===== 991px (Bootstrap lg breakpoint) ===== */
+@media (max-width: 991px) {
+  .navbar-biozen .navbar-collapse {
+    background: var(--glass-heavy);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    margin-top: 0.75rem;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+  }
+  .navbar-biozen .nav-link {
+    padding: 0.65rem 1rem !important;
+    font-size: 1rem;
+  }
+  .navbar-biozen .navbar-nav {
+    gap: 0.25rem;
+  }
+  .navbar-biozen .btn-whatsapp-sm {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+  .hero-title br {
+    display: none;
+  }
+  .hero-image-wrapper {
+    min-height: 300px;
+  }
+  .gallery-modal .modal-body .col-lg-5 {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
+  }
+  .gallery-modal .modal-body .col-lg-7 {
+    margin-bottom: 1rem;
+  }
+}
+
+/* ===== 768px ===== */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  .hero-subtitle {
+    font-size: 1.05rem;
+  }
+  .hero-section {
+    padding: 4rem 0 2rem;
+    text-align: center;
+  }
+  .hero-section .hero-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-actions {
+    justify-content: center;
+  }
+  .hero-stats {
+    justify-content: center;
+    gap: 2rem;
+  }
+  .hero-stat-number {
+    font-size: 1.5rem;
+  }
+  .section-title {
+    font-size: 1.75rem;
+  }
+  .section-subtitle {
+    margin-bottom: 2.5rem;
+  }
+  .section-padding {
+    padding: 3.5rem 0;
+  }
+  .cta-title {
+    font-size: 1.75rem;
+  }
+  .cta-text {
+    font-size: 0.95rem;
+  }
+  .hero-image-wrapper {
+    min-height: 300px;
+  }
+  .hero-image-placeholder i {
+    font-size: 3rem;
+  }
+  .hero-image-placeholder p {
+    font-size: 0.85rem;
+  }
+  .product-card-img {
+    height: 220px;
+    padding: 1rem;
+  }
+  .product-card-title {
+    font-size: 1rem;
+  }
+  .product-card-cat {
+    font-size: 0.6rem;
+    padding: 3px 10px;
+  }
+  .benefit-card {
+    padding: 1.5rem 1rem;
+  }
+  .benefit-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.35rem;
+  }
+  .benefit-title {
+    font-size: 1rem;
+  }
+  .benefit-text {
+    font-size: 0.82rem;
+  }
+  .testimonial-card {
+    padding: 1.5rem;
+  }
+  .testimonial-card::before {
+    font-size: 3rem;
+    top: 8px;
+    left: 14px;
+  }
+  .testimonial-text {
+    font-size: 0.9rem;
+  }
+  .gallery-main-img {
+    height: 300px;
+  }
+  .gallery-nav-btn {
+    opacity: 1;
+    width: 36px;
+    height: 36px;
+    font-size: 0.85rem;
+  }
+  .gallery-thumb {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+  }
+  .whatsapp-float {
+    width: 54px;
+    height: 54px;
+    font-size: 1.5rem;
+    bottom: 20px;
+    right: 20px;
+  }
+  .whatsapp-tooltip {
+    display: none;
+  }
+  .back-to-top {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+    bottom: 84px;
+    right: 20px;
+  }
+  .contact-card {
+    padding: 1.5rem;
+  }
+  .contact-icon {
+    width: 52px;
+    height: 52px;
+    font-size: 1.25rem;
+  }
+  .faq-accordion .accordion-button {
+    font-size: 0.95rem;
+    padding: 1.1rem 1.25rem;
+  }
+  .footer {
+    text-align: center;
+  }
+  .footer .footer-text {
+    margin: 0 auto;
+  }
+  .footer-social {
+    justify-content: center;
+  }
+  .footer-links {
+    margin-bottom: 1.5rem;
+  }
+  .footer-brand {
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+  .footer-title {
+    margin-bottom: 1rem;
+  }
+  .back-to-top {
+    bottom: 84px;
+  }
+  .cta-section .btn-whatsapp {
+    font-size: 1.05rem;
+    padding: 15px 32px;
+  }
+}
+
+/* ===== 576px (Bootstrap sm) ===== */
+@media (max-width: 576px) {
+  .hero-stats {
+    gap: 1.5rem;
+    width: 100%;
+  }
+  .hero-stat {
+    flex: 1;
+    min-width: 80px;
+  }
+  .hero-stat-number {
+    font-size: 1.35rem;
+  }
+  .hero-stat-label {
+    font-size: 0.78rem;
+  }
+  .hero-actions .btn-custom {
+    padding: 12px 24px;
+    font-size: 0.9rem;
+  }
+  .product-card-actions .btn {
+    font-size: 0.72rem;
+    padding: 6px 8px;
+  }
+  .product-card-actions .btn i {
+    font-size: 0.7rem;
+  }
+}
+
+/* ===== 425px ===== */
+@media (max-width: 425px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  .hero-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+  .hero-badge {
+    font-size: 0.75rem;
+    padding: 6px 14px;
+  }
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-actions .btn-custom {
+    width: 100%;
+    justify-content: center;
+    padding: 13px 20px;
+    font-size: 0.9rem;
+  }
+  .hero-stats {
+    gap: 1.25rem;
+  }
+  .hero-stat-number {
+    font-size: 1.25rem;
+  }
+  .hero-stat-label {
+    font-size: 0.75rem;
+  }
+  .section-title {
+    font-size: 1.5rem;
+  }
+  .section-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+  .hero-image-wrapper {
+    min-height: 240px;
+  }
+  .hero-image-placeholder i {
+    font-size: 2.5rem;
+  }
+  .hero-image-placeholder p {
+    font-size: 0.75rem;
+  }
+  .product-card-img {
+    height: 200px;
+  }
+  .product-card-body {
+    padding: 0.9rem 0.9rem 1rem;
+  }
+  .product-card-title {
+    font-size: 0.95rem;
+  }
+  .product-card-desc {
+    font-size: 0.8rem;
+    margin-bottom: 0.6rem;
+  }
+  .product-card-actions {
+    flex-direction: column;
+    gap: 5px;
+  }
+  .product-card-actions .btn {
+    font-size: 0.75rem;
+    padding: 8px 10px;
+  }
+  .product-card-cat {
+    font-size: 0.55rem;
+    padding: 3px 8px;
+    top: 8px;
+    left: 8px;
+  }
+  .pcard-dot {
+    width: 5px;
+    height: 5px;
+  }
+  .pcard-dot.active {
+    width: 14px;
+  }
+  .gallery-main-img {
+    height: 240px;
+  }
+  .gallery-thumb {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+  }
+  .gallery-modal .modal-body {
+    padding: 0.75rem;
+  }
+  .gallery-modal .modal-header {
+    padding: 0.75rem 1rem;
+  }
+  .gallery-modal .modal-footer {
+    padding: 0.75rem 1rem;
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+  .gallery-modal .modal-footer .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .gallery-modal .modal-dialog {
+    margin: 0;
+    max-width: 100%;
+  }
+  .gallery-modal .modal-content {
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    min-height: 100dvh;
+  }
+  .gallery-modal .modal-dialog-centered {
+    align-items: flex-end;
+    min-height: 100dvh;
+  }
+  .cta-title {
+    font-size: 1.5rem;
+  }
+  .cta-text {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+  .cta-section .btn-whatsapp {
+    font-size: 1rem;
+    padding: 14px 24px;
+    width: 100%;
+  }
+  .navbar-biozen .navbar-brand {
+    font-size: 1.35rem;
+  }
+  .navbar-biozen .navbar-brand i {
+    font-size: 1.25rem;
+  }
+  .faq-accordion .accordion-button {
+    font-size: 0.85rem;
+    padding: 0.9rem 1rem;
+  }
+  .faq-accordion .accordion-body {
+    font-size: 0.85rem;
+    padding: 0 1rem 1rem;
+  }
+  .contact-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.15rem;
+  }
+  .contact-card {
+    padding: 1.25rem;
+  }
+  .contact-card-title {
+    font-size: 0.9rem;
+  }
+  .contact-card-text {
+    font-size: 0.8rem;
+  }
+  .benefit-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+    border-radius: 14px;
+  }
+  .benefit-card {
+    padding: 1.25rem 0.75rem;
+  }
+  .benefit-title {
+    font-size: 0.9rem;
+  }
+  .benefit-text {
+    font-size: 0.78rem;
+  }
+  .testimonial-card {
+    padding: 1.25rem;
+  }
+  .testimonial-card::before {
+    font-size: 2.5rem;
+  }
+  .testimonial-stars {
+    font-size: 0.8rem;
+  }
+  .testimonial-text {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+  .testimonial-avatar {
+    width: 38px;
+    height: 38px;
+    font-size: 0.85rem;
+  }
+  .testimonial-name {
+    font-size: 0.85rem;
+  }
+  .testimonial-role {
+    font-size: 0.75rem;
+  }
+  .footer-brand {
+    font-size: 1.35rem;
+  }
+  .footer-text {
+    font-size: 0.85rem;
+  }
+  .footer-title {
+    font-size: 0.95rem;
+    margin-bottom: 0.85rem;
+  }
+  .footer-links a {
+    font-size: 0.85rem;
+  }
+  .footer-bottom {
+    font-size: 0.78rem;
+  }
+  .footer-social a {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+  .detail-short {
+    font-size: 0.9rem;
+  }
+  .detail-section-title {
+    font-size: 0.8rem;
+  }
+  .detail-section-body {
+    font-size: 0.85rem;
+  }
+}
+
+/* ===== 375px ===== */
+@media (max-width: 375px) {
+  .hero-title {
+    font-size: 1.75rem;
+  }
+  .hero-subtitle {
+    font-size: 0.9rem;
+  }
+  .hero-section {
+    padding: 3rem 0 1.5rem;
+  }
+  .hero-badge {
+    font-size: 0.7rem;
+    padding: 5px 12px;
+    gap: 6px;
+  }
+  .hero-actions .btn-custom {
+    padding: 11px 18px;
+    font-size: 0.85rem;
+    gap: 8px;
+  }
+  .hero-stat-number {
+    font-size: 1.15rem;
+  }
+  .hero-stat-label {
+    font-size: 0.7rem;
+  }
+  .section-title {
+    font-size: 1.35rem;
+  }
+  .section-subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 1.75rem;
+  }
+  .section-padding {
+    padding: 2.5rem 0;
+  }
+  .product-card-img {
+    height: 180px;
+    padding: 0.75rem;
+  }
+  .product-card-title {
+    font-size: 0.9rem;
+  }
+  .product-card-body {
+    padding: 0.75rem 0.75rem 0.9rem;
+  }
+  .product-card-desc {
+    font-size: 0.78rem;
+  }
+  .product-card-cat {
+    font-size: 0.5rem;
+    padding: 2px 7px;
+    top: 6px;
+    left: 6px;
+  }
+  .gallery-main-img {
+    height: 200px;
+  }
+  .gallery-thumb {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+  }
+  .gallery-modal .modal-body {
+    padding: 0.5rem;
+  }
+  .whatsapp-float {
+    width: 48px;
+    height: 48px;
+    font-size: 1.35rem;
+    bottom: 16px;
+    right: 16px;
+  }
+  .back-to-top {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+    bottom: 72px;
+    right: 16px;
+  }
+  .cta-title {
+    font-size: 1.35rem;
+  }
+  .cta-text {
+    font-size: 0.85rem;
+  }
+  .cta-section .btn-whatsapp {
+    font-size: 0.9rem;
+    padding: 12px 20px;
+  }
+  .contact-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.05rem;
+    border-radius: 14px;
+  }
+  .contact-card {
+    padding: 1rem;
+  }
+  .benefit-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.05rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+  }
+  .benefit-card {
+    padding: 1rem 0.6rem;
+  }
+  .benefit-title {
+    font-size: 0.82rem;
+  }
+  .benefit-text {
+    font-size: 0.72rem;
+  }
+  .footer-brand {
+    font-size: 1.25rem;
+  }
+  .navbar-biozen .navbar-brand {
+    font-size: 1.25rem;
+  }
+  .navbar-biozen .navbar-brand i {
+    font-size: 1.15rem;
+  }
+  .testimonial-card {
+    padding: 1rem;
+  }
+  .faq-accordion .accordion-button {
+    font-size: 0.82rem;
+    padding: 0.8rem 0.9rem;
+  }
+}
+
+/* ===== 320px ===== */
+@media (max-width: 320px) {
+  .hero-title {
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+  }
+  .hero-subtitle {
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+  .hero-badge {
+    font-size: 0.65rem;
+    padding: 4px 10px;
+    gap: 4px;
+  }
+  .hero-badge i {
+    font-size: 0.6rem;
+  }
+  .hero-actions {
+    gap: 8px;
+  }
+  .hero-actions .btn-custom {
+    padding: 10px 16px;
+    font-size: 0.8rem;
+    gap: 6px;
+  }
+  .hero-stats {
+    gap: 0.75rem;
+  }
+  .hero-stat-number {
+    font-size: 1rem;
+  }
+  .hero-stat-label {
+    font-size: 0.65rem;
+    margin-top: 2px;
+  }
+  .section-title {
+    font-size: 1.2rem;
+    letter-spacing: -0.3px;
+  }
+  .section-subtitle {
+    font-size: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+  .section-padding {
+    padding: 2rem 0;
+  }
+  .hero-image-wrapper {
+    min-height: 180px;
+    border-radius: var(--radius-sm);
+  }
+  .hero-image-placeholder {
+    padding: 1.5rem;
+  }
+  .hero-image-placeholder i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .hero-image-placeholder p {
+    font-size: 0.7rem;
+  }
+  .product-card-img {
+    height: 160px;
+    padding: 0.5rem;
+  }
+  .product-card-body {
+    padding: 0.65rem 0.65rem 0.8rem;
+  }
+  .product-card-title {
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+  }
+  .product-card-desc {
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+  }
+  .product-card-cat {
+    font-size: 0.45rem;
+    padding: 2px 6px;
+    top: 5px;
+    left: 5px;
+  }
+  .product-card-actions .btn {
+    font-size: 0.7rem;
+    padding: 6px 8px;
+  }
+  .pcard-dot {
+    width: 4px;
+    height: 4px;
+    gap: 4px;
+  }
+  .pcard-dot.active {
+    width: 12px;
+  }
+  .gallery-main-img {
+    height: 160px;
+  }
+  .gallery-thumb {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 8px;
+  }
+  .gallery-thumbs {
+    gap: 6px;
+  }
+  .gallery-nav-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 0.75rem;
+  }
+  .gallery-nav-prev {
+    left: 6px;
+  }
+  .gallery-nav-next {
+    right: 6px;
+  }
+  .gallery-modal .modal-header {
+    padding: 0.6rem 0.75rem;
+  }
+  .gallery-modal .modal-header .modal-title {
+    font-size: 1rem;
+  }
+  .gallery-modal .modal-body {
+    padding: 0.5rem;
+  }
+  .gallery-modal .modal-footer {
+    padding: 0.6rem 0.75rem;
+  }
+  .detail-short {
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+  .detail-section {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+  .detail-section-title {
+    font-size: 0.75rem;
+  }
+  .detail-section-body {
+    font-size: 0.8rem;
+  }
+  .whatsapp-float {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+    bottom: 12px;
+    right: 12px;
+  }
+  .back-to-top {
+    width: 34px;
+    height: 34px;
+    font-size: 0.8rem;
+    bottom: 64px;
+    right: 12px;
+  }
+  .cta-section {
+    padding: 3rem 0;
+  }
+  .cta-title {
+    font-size: 1.2rem;
+  }
+  .cta-text {
+    font-size: 0.8rem;
+    margin-bottom: 1.25rem;
+  }
+  .cta-section .btn-whatsapp {
+    font-size: 0.85rem;
+    padding: 11px 18px;
+  }
+  .navbar-biozen {
+    padding: 0.5rem 0;
+  }
+  .navbar-biozen .navbar-brand {
+    font-size: 1.15rem;
+    gap: 6px;
+  }
+  .navbar-biozen .navbar-brand i {
+    font-size: 1rem;
+  }
+  .navbar-biozen .navbar-toggler {
+    font-size: 1.3rem;
+  }
+  .contact-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 0.95rem;
+    border-radius: 12px;
+  }
+  .contact-card {
+    padding: 0.85rem;
+  }
+  .contact-card-title {
+    font-size: 0.82rem;
+  }
+  .contact-card-text {
+    font-size: 0.75rem;
+  }
+  .benefit-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+  }
+  .benefit-card {
+    padding: 0.85rem 0.5rem;
+  }
+  .benefit-title {
+    font-size: 0.78rem;
+    margin-bottom: 0.3rem;
+  }
+  .benefit-text {
+    font-size: 0.68rem;
+    line-height: 1.4;
+  }
+  .testimonial-card {
+    padding: 0.9rem;
+  }
+  .testimonial-card::before {
+    font-size: 2rem;
+    top: 4px;
+    left: 10px;
+  }
+  .testimonial-stars {
+    font-size: 0.75rem;
+    margin-bottom: 0.65rem;
+  }
+  .testimonial-text {
+    font-size: 0.8rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+  }
+  .testimonial-avatar {
+    width: 34px;
+    height: 34px;
+    font-size: 0.75rem;
+  }
+  .testimonial-name {
+    font-size: 0.8rem;
+  }
+  .testimonial-role {
+    font-size: 0.7rem;
+  }
+  .faq-accordion .accordion-item {
+    margin-bottom: 0.5rem;
+  }
+  .faq-accordion .accordion-button {
+    font-size: 0.78rem;
+    padding: 0.7rem 0.8rem;
+  }
+  .faq-accordion .accordion-body {
+    font-size: 0.78rem;
+    padding: 0 0.8rem 0.8rem;
+    line-height: 1.5;
+  }
+  .footer {
+    padding: 2rem 0 1rem;
+  }
+  .footer-brand {
+    font-size: 1.15rem;
+    gap: 6px;
+    margin-bottom: 0.5rem;
+  }
+  .footer-brand i {
+    font-size: 1rem;
+  }
+  .footer-text {
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+  .footer-title {
+    font-size: 0.85rem;
+    margin-bottom: 0.65rem;
+  }
+  .footer-links li {
+    margin-bottom: 0.4rem;
+  }
+  .footer-links a {
+    font-size: 0.78rem;
+  }
+  .footer-bottom {
+    font-size: 0.72rem;
+  }
+  .footer-social a {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+  .footer-divider {
+    margin: 1.25rem 0 1rem;
+  }
+}
+
+/* ===== FILTER PILLS (if present) ===== */
+@media (max-width: 768px) {
+  .filter-pills {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.5rem;
+    gap: 0.5rem;
+  }
+  .filter-pills::-webkit-scrollbar {
+    display: none;
+  }
+  .filter-pill {
+    font-size: 0.82rem;
+    padding: 6px 16px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 425px) {
+  .filter-pill {
+    font-size: 0.75rem;
+    padding: 5px 14px;
+  }
+}
+
+@media (max-width: 375px) {
+  .filter-pill {
+    font-size: 0.7rem;
+    padding: 4px 12px;
+  }
+}
+
+/* ===== TRUST MATRIX (if present) ===== */
+@media (max-width: 768px) {
+  .trust-matrix {
+    gap: 1rem;
+  }
+  .trust-item {
+    padding: 1rem;
+  }
+  .trust-item i {
+    font-size: 1.75rem;
+  }
+  .trust-item span {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 425px) {
+  .trust-item {
+    padding: 0.75rem;
+  }
+  .trust-item i {
+    font-size: 1.5rem;
+  }
+  .trust-item span {
+    font-size: 0.78rem;
+  }
+}
+
+/* ===== PRINT ===== */
+@media print {
+  * {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  .whatsapp-float,
+  .back-to-top,
+  .bg-animation,
+  .navbar-biozen .btn-whatsapp-sm,
+  .btn-whatsapp,
+  .btn-whatsapp-sm,
+  .whatsapp-tooltip {
+    display: none !important;
+  }
+  .navbar-biozen {
+    position: relative !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid #ddd;
+  }
+  .navbar-biozen .navbar-collapse {
+    display: none !important;
+  }
+  .navbar-biozen .navbar-brand {
+    justify-content: center;
+    color: #000 !important;
+  }
+  .hero-section {
+    min-height: auto !important;
+    padding: 2rem 0 !important;
+  }
+  .hero-image-wrapper {
+    display: none !important;
+  }
+  .section-padding {
+    padding: 1.5rem 0 !important;
+  }
+  .product-card {
+    break-inside: avoid;
+    border: 1px solid #ddd !important;
+  }
+  .product-card:hover {
+    transform: none !important;
+  }
+  .footer {
+    background: #f5f5f5 !important;
+    color: #333 !important;
+    border-top: 1px solid #ddd;
+  }
+  .footer-brand {
+    color: #000 !important;
+  }
+  .footer-title {
+    color: #000 !important;
+  }
+  .footer-links a {
+    color: #555 !important;
+  }
+  .footer-bottom {
+    color: #777 !important;
+  }
+  .gradient-text,
+  .green-gradient,
+  .hero-title .highlight {
+    -webkit-text-fill-color: #000 !important;
+    background: none !important;
+    color: #000 !important;
+  }
+  .testimonial-card {
+    border: 1px solid #ddd !important;
+    break-inside: avoid;
+  }
+  .contact-card {
+    border: 1px solid #ddd !important;
+  }
+  .gallery-modal .modal-dialog {
+    display: none !important;
+  }
+  .cta-section {
+    background: #f5f5f5 !important;
+    border-top: 2px solid var(--primary);
+  }
+  .cta-title {
+    color: #000 !important;
+  }
+  .cta-text {
+    color: #555 !important;
+  }
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.7em;
+    color: #666;
+  }
+  nav a[href]::after,
+  .footer-links a[href]::after {
+    display: none;
+  }
+}
+
+/* ===== PREFERS REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .blob {
+    animation: none !important;
+  }
+  .hero-circle {
+    animation: none !important;
+  }
+  .whatsapp-float {
+    animation: none !important;
+  }
+  .product-card:hover .product-card-img img {
+    transform: none !important;
+  }
+  .product-card:hover {
+    transform: none !important;
+  }
+  .benefit-card:hover {
+    transform: none !important;
+  }
+  .testimonial-card:hover {
+    transform: none !important;
+  }
+  .contact-card:hover {
+    transform: none !important;
+  }
+  .btn-custom:hover {
+    transform: none !important;
+  }
+  .back-to-top:hover {
+    transform: none !important;
+  }
+  .whatsapp-float:hover {
+    transform: none !important;
+  }
+  .footer-social a:hover {
+    transform: none !important;
+  }
+  .footer-links a:hover {
+    padding-left: 0 !important;
+  }
+  .gradient-text,
+  .green-gradient,
+  .hero-title .highlight {
+    background: none !important;
+    -webkit-text-fill-color: var(--primary-dark) !important;
+    color: var(--primary-dark) !important;
+  }
+}
+
+/* ===== PREFERS HIGH CONTRAST ===== */
+@media (prefers-contrast: high) {
+  :root {
+    --text-body: #1e293b;
+    --text-soft: #334155;
+    --text-light: #475569;
+    --border: #94a3b8;
+    --border-soft: #cbd5e1;
+  }
+  .btn-custom {
+    border: 2px solid transparent;
+  }
+  .btn-primary-custom {
+    border-color: var(--primary-dark);
+  }
+  .btn-secondary-custom {
+    border-color: var(--text-body);
+    background: white;
+  }
+  .btn-whatsapp {
+    border-color: #128C7E;
+  }
+  .btn-outline {
+    border-width: 2px;
+  }
+  .product-card {
+    border-width: 2px;
+  }
+  .testimonial-card {
+    border-width: 2px;
+  }
+  .contact-card {
+    border-width: 2px;
+  }
+  .benefit-card {
+    border-width: 2px;
+  }
+  .benefit-card:hover {
+    border-color: var(--text-body);
+  }
+  .navbar-biozen {
+    border-bottom-width: 2px;
+  }
+  .whatsapp-float {
+    border: 2px solid #128C7E;
+  }
+  .back-to-top {
+    border: 2px solid white;
+  }
+  .gallery-thumb {
+    border-width: 3px;
+  }
+  .gallery-thumb.active {
+    border-color: var(--primary-dark);
+  }
+  .hero-badge {
+    border-width: 2px;
+  }
+  .gradient-text,
+  .green-gradient,
+  .hero-title .highlight {
+    background: none !important;
+    -webkit-text-fill-color: var(--primary-dark) !important;
+    color: var(--primary-dark) !important;
+  }
+  .modal-backdrop.show {
+    opacity: 0.85;
+  }
+}
+
+/* ===== TOUCH DEVICES (hover: none, pointer: coarse) ===== */
+@media (hover: none) and (pointer: coarse) {
+  .gallery-nav-btn {
+    opacity: 1;
+  }
+  .gallery-main-img:hover .gallery-nav-btn {
+    opacity: 1;
+  }
+  .product-card:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+    border-color: var(--border-soft);
+  }
+  .product-card:hover .product-card-img img {
+    transform: none;
+  }
+  .product-card:hover .product-card-title {
+    color: var(--dark);
+  }
+  .product-card:active {
+    background: var(--bg-gray);
+    transition-duration: 0.05s;
+  }
+  .benefit-card:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: transparent;
+  }
+  .testimonial-card:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--border);
+  }
+  .contact-card:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--border);
+  }
+  .whatsapp-tooltip {
+    display: none;
+  }
+  .btn-custom:hover {
+    transform: none;
+  }
+  .btn-primary-custom:hover {
+    transform: none;
+    box-shadow: var(--shadow-green);
+  }
+  .btn-secondary-custom:hover {
+    transform: none;
+    box-shadow: var(--shadow-md);
+  }
+  .btn-whatsapp:hover {
+    transform: none;
+    box-shadow: var(--shadow-whatsapp);
+  }
+  .btn-whatsapp-sm:hover {
+    transform: none;
+  }
+  .back-to-top:hover {
+    transform: none;
+    background: var(--dark);
+  }
+  .whatsapp-float:hover {
+    transform: none;
+  }
+  .footer-social a:hover {
+    transform: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .footer-links a:hover {
+    padding-left: 0;
+  }
+  .benefit-card:hover .benefit-icon {
+    transform: none;
+  }
+  .benefit-icon {
+    transition: none;
+  }
+  .gallery-thumb:hover {
+    border-color: transparent;
+    opacity: 0.6;
+  }
+  .gallery-thumb.active {
+    border-color: var(--primary);
+    opacity: 1;
+  }
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+  * {
+    scrollbar-width: none;
+  }
+  .pcard-dot {
+    cursor: default;
+  }
+  .gallery-nav-btn:hover {
+    background: rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* ===== SAFE AREA INSETS (notch devices) ===== */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .whatsapp-float {
+    bottom: calc(24px + env(safe-area-inset-bottom));
+    right: calc(24px + env(safe-area-inset-right));
+  }
+  .back-to-top {
+    bottom: calc(96px + env(safe-area-inset-bottom));
+    right: calc(24px + env(safe-area-inset-right));
+  }
+  .gallery-modal .modal-content {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+@media (max-width: 425px) {
+  @supports (padding: env(safe-area-inset-bottom)) {
+    .gallery-modal .modal-content {
+      padding-bottom: calc(env(safe-area-inset-bottom) + 8px);
+    }
+    .whatsapp-float {
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      right: calc(16px + env(safe-area-inset-right));
+    }
+    .back-to-top {
+      bottom: calc(72px + env(safe-area-inset-bottom));
+      right: calc(16px + env(safe-area-inset-right));
+    }
+  }
+}
+
+/* ===== LANDSCAPE PHONE ===== */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero-section {
+    min-height: auto;
+    padding: 3.5rem 0 1.5rem;
+  }
+  .hero-title {
+    font-size: 2rem;
+  }
+  .hero-image-wrapper {
+    min-height: 200px;
+  }
+  .gallery-modal .modal-dialog {
+    align-items: center;
+    min-height: auto;
+  }
+  .gallery-modal .modal-content {
+    min-height: auto;
+    border-radius: var(--radius-md);
+  }
+  .gallery-main-img {
+    height: 200px;
+  }
+  .gallery-modal .modal-body .row {
+    flex-direction: row;
+  }
+  .gallery-modal .modal-body .col-lg-7 {
+    margin-bottom: 0;
+  }
+}
