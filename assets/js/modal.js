@@ -6,12 +6,21 @@ function openProductModal(productId) {
   const product = window.products.find(p => p.id === productId);
   if (!product) return;
 
+  // Use fullscreen overlay on mobile (< 768px)
+  if (window.innerWidth < 768 && typeof openProductOverlay === 'function') {
+    openProductOverlay(productId);
+    return;
+  }
+
   galleryProduct = product;
   galleryCurrentIndex = 0;
   resetZoom();
 
   document.getElementById('modalProductTitle').textContent = product.title;
   document.getElementById('modalProductCat').textContent = product.cat;
+
+  const shortEl = document.getElementById('modalProductShort');
+  if (shortEl) shortEl.textContent = product.short;
 
   updateGalleryView();
 
@@ -32,6 +41,13 @@ function openProductModal(productId) {
 
   const modalEl = document.getElementById('productModal');
   if (!modalEl) return;
+
+  // Reset any GSAP inline styles before showing
+  if (typeof gsap !== 'undefined') {
+    gsap.set(modalEl.querySelector('.gallery-hero'), { clearProps: 'all' });
+    gsap.set(modalEl.querySelector('.product-info-section'), { clearProps: 'all' });
+  }
+
   const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
   modal.show();
 
@@ -52,6 +68,12 @@ function updateGalleryView() {
     img.alt = `${galleryProduct.title} - Imagen ${galleryCurrentIndex + 1}`;
   }
 
+  // Update image counter
+  const counter = document.getElementById('modalGalleryCounter');
+  if (counter) {
+    counter.textContent = `${galleryCurrentIndex + 1}/${galleryProduct.media.length}`;
+  }
+
   const thumbs = document.getElementById('modalGalleryThumbs');
   if (thumbs) {
     thumbs.innerHTML = '';
@@ -67,6 +89,11 @@ function updateGalleryView() {
       });
       thumbs.appendChild(thumb);
     });
+    // Scroll active thumb into view
+    const activeThumb = thumbs.querySelector('.active');
+    if (activeThumb) {
+      activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
   }
 
   const prevBtn = document.getElementById('modalGalleryPrev');
@@ -112,6 +139,50 @@ function resetGalleryAutoSlide() {
   startGalleryAutoSlide();
 }
 
+function animateModalEntrance() {
+  if (typeof gsap === 'undefined') return;
+  const modalEl = document.getElementById('productModal');
+  if (!modalEl || !modalEl.classList.contains('show')) return;
+
+  const hero = modalEl.querySelector('.gallery-hero');
+  const info = modalEl.querySelector('.product-info-section');
+
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+  if (hero) {
+    tl.fromTo(hero,
+      { opacity: 0, y: 30, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.5 }
+    );
+  }
+
+  if (info) {
+    tl.fromTo(info,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.4 },
+      '-=0.15'
+    );
+
+    const accordionItems = info.querySelectorAll('.accordion-item');
+    if (accordionItems.length) {
+      tl.fromTo(accordionItems,
+        { opacity: 0, x: -15 },
+        { opacity: 1, x: 0, duration: 0.35, stagger: 0.08 },
+        '-=0.1'
+      );
+    }
+
+    const whatsappBtn = info.querySelector('.btn-whatsapp-premium');
+    if (whatsappBtn) {
+      tl.fromTo(whatsappBtn,
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, duration: 0.35 },
+        '-=0.15'
+      );
+    }
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const modalEl = document.getElementById('productModal');
   if (!modalEl) return;
@@ -124,6 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   modalEl.addEventListener('shown.bs.modal', () => {
     startGalleryAutoSlide();
+    animateModalEntrance();
   });
 
   document.getElementById('modalGalleryPrev')?.addEventListener('click', galleryPrev);

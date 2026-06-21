@@ -24,7 +24,6 @@ function renderProductsGrid(productsList) {
         </div>
         <div class="product-card-body">
           <h3 class="product-card-title">${product.title}</h3>
-          <p class="product-card-desc">${product.short}</p>
           <div class="product-card-actions" onclick="event.stopPropagation()">
             <button class="btn btn-whatsapp-sm" onclick="event.stopPropagation(); openWhatsApp('${product.title}')">
               <i class="bi bi-whatsapp"></i> Consultar

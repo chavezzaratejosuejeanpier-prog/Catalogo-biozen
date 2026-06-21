@@ -9,6 +9,18 @@
   <meta name="author" content="BIOZEN Perú">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#0d9488">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="BIOZEN">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="BIOZEN">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- Manifest & PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/assets/img/icon-192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/assets/img/icon-192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/assets/img/icon-512.png">
 
   <!-- Canonical -->
   <link rel="canonical" href="https://biozen.pe">
@@ -135,29 +147,27 @@
   }
   </script>
 
-  <!-- Fonts -->
+  <!-- Preconnect for performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" rel="stylesheet">
 
-  <!-- Swiper -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css" />
-
   <!-- Project CSS -->
   <link href="assets/css/variables.css" rel="stylesheet">
   <link href="assets/css/styles.css" rel="stylesheet">
   <link href="assets/css/animations.css" rel="stylesheet">
   <link href="assets/css/responsive.css" rel="stylesheet">
+  <link href="assets/css/app.css" rel="stylesheet">
 
   <style>
-    .gallery-img-container img {
-      transition: transform 0.1s ease;
-    }
-
     .trust-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -219,24 +229,6 @@
       color: var(--primary);
       opacity: 0.6;
       animation: float 3s ease-in-out infinite;
-    }
-    .gallery-img-container {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      position: relative;
-    }
-    .gallery-img-container img {
-      max-width: 90%;
-      max-height: 90%;
-      object-fit: contain;
-      user-select: none;
-      -webkit-user-drag: none;
-      will-change: transform;
-      transform-origin: 0 0;
     }
     .filter-pill[data-filter="all"] {
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
@@ -373,78 +365,86 @@
         <p class="section-subtitle reveal reveal-slideUp stagger-1">Encuentra la fórmula natural ideal para ti</p>
       </div>
 
-      <!-- Products Grid -->
-      <div id="productsGrid" class="row g-4"></div>
+      <!-- Products Grid (Desktop) -->
+      <div id="productsGrid" class="row g-4 d-none d-md-flex"></div>
+
+      <!-- Products Scroll (Mobile) -->
+      <div class="d-md-none">
+        <div id="scrollProducts" class="products-scroll"></div>
+      </div>
     </div>
   </section>
 
-  <!-- ===== PRODUCT MODAL ===== -->
+  <!-- ===== PRODUCT MODAL (Premium App Style) ===== -->
   <div class="modal fade gallery-modal" id="productModal" tabindex="-1" aria-labelledby="modalProductTitle" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-dialog modal-fullscreen-md-down modal-xl modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header">
-          <div>
-            <h5 class="modal-title fw-bold" id="modalProductTitle">Producto</h5>
-            <span id="modalProductCat" class="badge bg-primary bg-opacity-10 text-primary px-3 py-1 rounded-pill mt-1" style="font-size:0.7rem;"></span>
-          </div>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+
         <div class="modal-body">
-          <div class="row g-4">
-            <div class="col-lg-5">
-              <div class="gallery-main-img">
-                <div class="gallery-img-container" id="modalGalleryImgContainer">
-                  <img id="modalGalleryImg" src="" alt="">
-                </div>
-                <button class="gallery-nav-btn gallery-nav-prev" id="modalGalleryPrev" aria-label="Anterior">
-                  <i class="bi bi-chevron-left"></i>
-                </button>
-                <button class="gallery-nav-btn gallery-nav-next" id="modalGalleryNext" aria-label="Siguiente">
-                  <i class="bi bi-chevron-right"></i>
-                </button>
+          <!-- Left Column: Gallery -->
+          <div class="gallery-hero">
+            <div class="gallery-main-img">
+              <div class="gallery-img-container" id="modalGalleryImgContainer">
+                <img id="modalGalleryImg" src="" alt="">
               </div>
-              <div class="gallery-thumbs" id="modalGalleryThumbs"></div>
+              <span class="gallery-tap-hint">Toca para ampliar</span>
+              <button class="gallery-nav-btn gallery-nav-prev" id="modalGalleryPrev" aria-label="Anterior">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <button class="gallery-nav-btn gallery-nav-next" id="modalGalleryNext" aria-label="Siguiente">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+              <div class="gallery-img-counter" id="modalGalleryCounter">1/1</div>
             </div>
-            <div class="col-lg-7">
-              <div class="accordion modal-accordion" id="modalAccordion">
-                <div class="accordion-item accordion-benefits">
-                  <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#benefitsCollapse" aria-expanded="true">
-                      ¿Qué hace por ti?
-                    </button>
-                  </h2>
-                  <div id="benefitsCollapse" class="accordion-collapse collapse show" data-bs-parent="#modalAccordion">
-                    <div class="accordion-body"></div>
-                  </div>
-                </div>
-                <div class="accordion-item accordion-ingredients">
-                  <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ingredientsCollapse">
-                      ¿Qué contiene?
-                    </button>
-                  </h2>
-                  <div id="ingredientsCollapse" class="accordion-collapse collapse" data-bs-parent="#modalAccordion">
-                    <div class="accordion-body"></div>
-                  </div>
-                </div>
-                <div class="accordion-item accordion-usage">
-                  <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#usageCollapse">
-                      ¿Cómo se toma?
-                    </button>
-                  </h2>
-                  <div id="usageCollapse" class="accordion-collapse collapse" data-bs-parent="#modalAccordion">
-                    <div class="accordion-body"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div class="gallery-thumbs" id="modalGalleryThumbs"></div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <div class="modal-cta-sticky w-100 d-flex gap-2">
-            <button class="btn btn-whatsapp-sm w-100" id="modalWhatsappBtn">
-              <i class="bi bi-whatsapp"></i> Consultar por WhatsApp
+
+          <!-- Right Column: Product Info -->
+          <div class="product-info-section">
+            <span class="modal-category-badge" id="modalProductCat"></span>
+            <h2 class="modal-product-title" id="modalProductTitle">Producto</h2>
+            <p class="modal-product-short" id="modalProductShort"></p>
+
+            <!-- Premium Accordion -->
+            <div class="accordion premium-accordion" id="modalAccordion">
+              <div class="accordion-item accordion-benefits">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#benefitsCollapse" aria-expanded="true">
+                    <i class="bi bi-star"></i> ¿Qué hace por ti?
+                  </button>
+                </h2>
+                <div id="benefitsCollapse" class="accordion-collapse collapse show" data-bs-parent="#modalAccordion">
+                  <div class="accordion-body"></div>
+                </div>
+              </div>
+              <div class="accordion-item accordion-ingredients">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ingredientsCollapse">
+                    <i class="bi bi-droplet"></i> ¿Qué contiene?
+                  </button>
+                </h2>
+                <div id="ingredientsCollapse" class="accordion-collapse collapse" data-bs-parent="#modalAccordion">
+                  <div class="accordion-body"></div>
+                </div>
+              </div>
+              <div class="accordion-item accordion-usage">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#usageCollapse">
+                    <i class="bi bi-clock"></i> ¿Cómo se toma?
+                  </button>
+                </h2>
+                <div id="usageCollapse" class="accordion-collapse collapse" data-bs-parent="#modalAccordion">
+                  <div class="accordion-body"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- WhatsApp CTA inside right column -->
+            <button class="btn btn-whatsapp-premium" id="modalWhatsappBtn">
+              <i class="bi bi-whatsapp"></i>
+              <span class="cta-text">Consultar por WhatsApp</span>
+              <span class="cta-arrow"><i class="bi bi-arrow-right"></i></span>
             </button>
           </div>
         </div>
@@ -589,6 +589,30 @@
     </div>
   </section>
 
+  <!-- ===== BOTTOM NAVIGATION (Mobile) ===== -->
+  <nav class="app-bottom-nav" aria-label="Navegación principal">
+    <a class="nav-item active" data-target="#inicio" href="#inicio" aria-label="Inicio">
+      <i class="bi bi-house"></i>
+      <span>Inicio</span>
+    </a>
+    <a class="nav-item" data-target="#productos" href="#productos" aria-label="Productos">
+      <i class="bi bi-grid"></i>
+      <span>Productos</span>
+    </a>
+    <a class="nav-item" data-target="#confianza" href="#confianza" aria-label="Beneficios">
+      <i class="bi bi-shield-check"></i>
+      <span>Beneficios</span>
+    </a>
+    <a class="nav-item" data-target="#testimonios" href="#testimonios" aria-label="Testimonios">
+      <i class="bi bi-chat-square-quote"></i>
+      <span>Testimonios</span>
+    </a>
+    <a class="nav-item" data-target="#contacto" href="#contacto" aria-label="Contacto">
+      <i class="bi bi-envelope"></i>
+      <span>Contacto</span>
+    </a>
+  </nav>
+
   <!-- ===== FOOTER ===== -->
   <footer class="footer">
     <div class="container">
@@ -639,6 +663,59 @@
     </div>
   </footer>
 
+  <!-- ===== FULLSCREEN PRODUCT OVERLAY (Mobile) ===== -->
+  <div class="product-overlay" id="productOverlay">
+    <div class="overlay-header">
+      <div>
+        <div class="overlay-category"></div>
+        <h3 class="overlay-title"></h3>
+      </div>
+      <button class="overlay-close" aria-label="Cerrar">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="overlay-drag-handle">
+      <div class="handle-bar"></div>
+    </div>
+
+    <div class="overlay-gallery">
+      <div class="gallery-track"></div>
+      <div class="gallery-dots"></div>
+      <div class="gallery-counter"></div>
+      <div class="overlay-pull-indicator">
+        <i class="bi bi-arrow-down"></i>
+      </div>
+    </div>
+
+    <div class="overlay-body">
+      <div class="overlay-content">
+        <p class="overlay-short"></p>
+
+        <div class="overlay-section">
+          <div class="overlay-section-title"><i class="bi bi-star"></i> ¿Qué hace por ti?</div>
+          <div class="overlay-section-body benefits-body"></div>
+        </div>
+
+        <div class="overlay-section">
+          <div class="overlay-section-title"><i class="bi bi-droplet"></i> ¿Qué contiene?</div>
+          <div class="overlay-section-body ingredients-body"></div>
+        </div>
+
+        <div class="overlay-section">
+          <div class="overlay-section-title"><i class="bi bi-clock"></i> ¿Cómo se toma?</div>
+          <div class="overlay-section-body usage-body"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay-footer">
+      <button class="btn btn-whatsapp-sm overlay-whatsapp-btn">
+        <i class="bi bi-whatsapp"></i> Consultar por WhatsApp
+      </button>
+    </div>
+  </div>
+
   <!-- ===== WHATSAPP FLOAT BUTTON ===== -->
   <a href="https://wa.me/51972507949" target="_blank" rel="noopener" class="whatsapp-float" id="whatsappFloat" aria-label="Contactar por WhatsApp">
     <i class="bi bi-whatsapp"></i>
@@ -651,19 +728,19 @@
   </a>
 
   <!-- ===== JAVASCRIPT ===== -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="assets/js/whatsapp.js"></script>
-  <script src="assets/js/products.js"></script>
-  <script src="assets/js/zoom.js"></script>
-  <script src="assets/js/modal.js"></script>
-  <script src="assets/js/gsap-effects.js"></script>
-  <script src="assets/js/scrolltrigger.js"></script>
-  <script src="assets/js/tilt-3d.js"></script>
-  <script src="assets/js/analytics.js"></script>
-  <script src="assets/js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script defer src="assets/js/whatsapp.js"></script>
+  <script defer src="assets/js/products.js"></script>
+  <script defer src="assets/js/zoom.js"></script>
+  <script defer src="assets/js/modal.js"></script>
+  <script defer src="assets/js/gsap-effects.js"></script>
+  <script defer src="assets/js/scrolltrigger.js"></script>
+  <script defer src="assets/js/tilt-3d.js"></script>
+  <script defer src="assets/js/analytics.js"></script>
+  <script defer src="assets/js/main.js"></script>
+  <script defer src="assets/js/app.js"></script>
 
 
   <!-- ===== ANALYTICS SCRIPTS (uncomment and configure) ===== -->

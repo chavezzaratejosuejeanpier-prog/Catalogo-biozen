@@ -149,6 +149,9 @@
   .product-card-title {
     font-size: 1rem;
   }
+  .product-card-price {
+    font-size: 0.9rem;
+  }
   .product-card-cat {
     font-size: 0.6rem;
     padding: 3px 10px;
@@ -335,6 +338,9 @@
   }
   .product-card-title {
     font-size: 0.95rem;
+  }
+  .product-card-price {
+    font-size: 0.85rem;
   }
   .product-card-desc {
     font-size: 0.8rem;
@@ -551,6 +557,9 @@
   .product-card-title {
     font-size: 0.9rem;
   }
+  .product-card-price {
+    font-size: 0.82rem;
+  }
   .product-card-body {
     padding: 0.75rem 0.75rem 0.9rem;
   }
@@ -712,6 +721,9 @@
   .product-card-title {
     font-size: 0.85rem;
     margin-bottom: 0.25rem;
+  }
+  .product-card-price {
+    font-size: 0.78rem;
   }
   .product-card-desc {
     font-size: 0.75rem;
@@ -1337,7 +1349,7 @@
   }
 }
 
-/* ===== SAFE AREA INSETS (notch devices) ===== */
+/* ===== SAFE AREA INSETS (notch devices, bottom nav) ===== */
 @supports (padding: env(safe-area-inset-bottom)) {
   .whatsapp-float {
     bottom: calc(24px + env(safe-area-inset-bottom));
@@ -1349,6 +1361,28 @@
   }
   .gallery-modal .modal-content {
     padding-bottom: env(safe-area-inset-bottom);
+  }
+  .app-bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .product-overlay .overlay-footer {
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+  }
+  .product-overlay .overlay-header {
+    padding-top: calc(0.75rem + env(safe-area-inset-top));
+  }
+}
+
+@media (max-width: 767px) {
+  @supports (padding: env(safe-area-inset-bottom)) {
+    .whatsapp-float {
+      bottom: calc(80px + env(safe-area-inset-bottom));
+      right: calc(16px + env(safe-area-inset-right));
+    }
+    .back-to-top {
+      bottom: calc(140px + env(safe-area-inset-bottom));
+      right: calc(16px + env(safe-area-inset-right));
+    }
   }
 }
 
@@ -1364,6 +1398,17 @@
     .back-to-top {
       bottom: calc(72px + env(safe-area-inset-bottom));
       right: calc(16px + env(safe-area-inset-right));
+    }
+  }
+}
+
+@media (max-width: 425px) and (max-width: 767px) {
+  @supports (padding: env(safe-area-inset-bottom)) {
+    .whatsapp-float {
+      bottom: calc(72px + env(safe-area-inset-bottom));
+    }
+    .back-to-top {
+      bottom: calc(132px + env(safe-area-inset-bottom));
     }
   }
 }

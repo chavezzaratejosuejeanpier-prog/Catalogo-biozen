@@ -1,9 +1,23 @@
 (function () {
   'use strict';
 
+  var isMobile = window.innerWidth < 768;
+  var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+  function getReducedFactor() {
+    return isMobile ? 0.5 : 1;
+  }
+
   function initFloatingSpheres() {
     var spheres = document.querySelectorAll('.sphere-1, .sphere-2, .sphere-3');
     if (!spheres.length) return;
+
+    if (isMobile) {
+      spheres.forEach(function (el) {
+        gsap.set(el, { opacity: 0.15 });
+      });
+      return;
+    }
 
     var configs = [
       { x: 15, y: -10, duration: 4 },
@@ -50,22 +64,34 @@
     var hero = document.querySelector('.hero-section');
     if (!hero) return;
 
+    var factor = getReducedFactor();
+
     var badge = hero.querySelector('.hero-badge');
     var title = hero.querySelector('.hero-title');
     var subtitle = hero.querySelector('.hero-subtitle');
     var actions = hero.querySelector('.hero-actions');
     var stats = hero.querySelector('.hero-stats');
 
-    var tl = gsap.timeline({ defaults: { ease: 'power3.out', duration: 0.7 } });
+    var tl = gsap.timeline({ defaults: { ease: 'power3.out', duration: 0.7 * factor } });
 
-    if (badge) tl.from(badge, { y: 30, opacity: 0, duration: 0.5 });
-    if (title) tl.from(title, { y: 40, opacity: 0 }, '-=0.2');
-    if (subtitle) tl.from(subtitle, { y: 30, opacity: 0 }, '-=0.3');
-    if (actions) tl.from(actions, { y: 20, opacity: 0 }, '-=0.2');
-    if (stats) tl.from(stats, { y: 20, opacity: 0 }, '-=0.15');
+    if (badge) tl.from(badge, { y: 30 * factor, opacity: 0, duration: 0.5 * factor });
+    if (title) tl.from(title, { y: 40 * factor, opacity: 0 }, '-=0.2');
+    if (subtitle) tl.from(subtitle, { y: 30 * factor, opacity: 0 }, '-=0.3');
+    if (actions) tl.from(actions, { y: 20 * factor, opacity: 0 }, '-=0.2');
+    if (stats) tl.from(stats, { y: 20 * factor, opacity: 0 }, '-=0.15');
+
+    // Mobile: also fade in the hero visual
+    if (isMobile) {
+      var visual = hero.querySelector('.hero-image-wrapper, .hero-visual');
+      if (visual) {
+        tl.from(visual, { opacity: 0, scale: 0.9 }, '-=0.3');
+      }
+    }
   }
 
   function initMagneticButtons() {
+    if (isTouchDevice) return;
+
     var buttons = document.querySelectorAll('.btn-magnetic');
     if (!buttons.length) return;
 
@@ -116,7 +142,7 @@
         { textContent: 0 },
         {
           textContent: target,
-          duration: 2,
+          duration: isMobile ? 1.2 : 2,
           ease: 'power2.out',
           snap: { textContent: Math.pow(10, -decimals) },
           scrollTrigger: {
@@ -133,6 +159,8 @@
   }
 
   function initHeroParallax() {
+    if (isMobile) return;
+
     var hero = document.querySelector('.hero-section');
     if (!hero) return;
 
@@ -158,6 +186,8 @@
   }
 
   function initFloatingElements() {
+    if (isMobile) return;
+
     var floats = document.querySelectorAll('.float-element');
     if (!floats.length) return;
 
@@ -182,16 +212,92 @@
     reveals.forEach(function (el) {
       ScrollTrigger.create({
         trigger: el,
-        start: 'top 85%',
+        start: isMobile ? 'top 90%' : 'top 85%',
         toggleClass: { targets: el, className: 'revealed' },
         once: true
       });
     });
   }
 
+  /* ===== APP-LIKE PAGE TRANSITIONS ===== */
+  function initPageTransitions() {
+    // Smooth reveal for sections as they enter viewport
+    var sections = document.querySelectorAll('section');
+    sections.forEach(function (section) {
+      if (section.classList.contains('hero-section')) return;
+      gsap.fromTo(section,
+        { opacity: 0, y: isMobile ? 30 : 60 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: isMobile ? 0.6 : 0.9,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+            once: true
+          }
+        }
+      );
+    });
+  }
+
+  /* ===== PRODUCT CARD APP-LIKE REVEAL ===== */
+  function initMobileCardReveal() {
+    if (!isMobile) return;
+
+    var cards = document.querySelectorAll('.product-card');
+    cards.forEach(function (card, i) {
+      gsap.fromTo(card,
+        { opacity: 0, y: 40, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.5,
+          delay: i * 0.06,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 92%',
+            toggleActions: 'play none none none',
+            once: true
+          }
+        }
+      );
+    });
+  }
+
+  /* ===== NAVBAR SCROLL ANIMATION ===== */
+  function initNavbarAnimation() {
+    var navbar = document.querySelector('.navbar-biozen');
+    if (!navbar) return;
+
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 50) {
+        gsap.to(navbar, {
+          background: 'rgba(255,255,255,0.97)',
+          boxShadow: '0 4px 30px rgba(0,0,0,0.08)',
+          duration: 0.3,
+          overwrite: 'auto'
+        });
+      } else {
+        gsap.to(navbar, {
+          background: 'var(--glass-heavy)',
+          boxShadow: 'none',
+          duration: 0.3,
+          overwrite: 'auto'
+        });
+      }
+    }, { passive: true });
+  }
+
   function init() {
     if (typeof gsap === 'undefined') return;
     gsap.registerPlugin(ScrollTrigger);
+
+    isMobile = window.innerWidth < 768;
 
     initFloatingSpheres();
     initTopBarRotation();
@@ -201,6 +307,17 @@
     initHeroParallax();
     initFloatingElements();
     initScrollReveals();
+    initPageTransitions();
+    initMobileCardReveal();
+    initNavbarAnimation();
+
+    ScrollTrigger.refresh();
+
+    // Re-check on resize
+    window.addEventListener('resize', function () {
+      isMobile = window.innerWidth < 768;
+      ScrollTrigger.refresh();
+    });
   }
 
   document.addEventListener('DOMContentLoaded', init);

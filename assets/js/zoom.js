@@ -11,24 +11,138 @@ let lastPinchDist = 0;
 let pinchStartZoom = 1;
 let zoomControlsInitialized = false;
 
+function getZoomContainer() {
+  return document.getElementById('modalGalleryImgContainer');
+}
+
+function getZoomImg() {
+  const container = getZoomContainer();
+  return container ? container.querySelector('img') : null;
+}
+
+function getContainerBounds() {
+  const container = getZoomContainer();
+  if (!container) return { w: 0, h: 0 };
+  return { w: container.clientWidth, h: container.clientHeight };
+}
+
+function getImgNaturalSize() {
+  const img = getZoomImg();
+  if (!img || !img.naturalWidth) return null;
+  return { w: img.naturalWidth, h: img.naturalHeight };
+}
+
+function animateZoomReset() {
+  const img = getZoomImg();
+  if (!img) return;
+  zoomLevel = 1;
+  isZoomed = false;
+  panX = 0;
+  panY = 0;
+  isDragging = false;
+  const container = getZoomContainer();
+  if (container) container.style.cursor = 'default';
+  if (typeof gsap !== 'undefined') {
+    gsap.to(img, {
+      x: 0,
+      y: 0,
+      scale: 1,
+      duration: 0.45,
+      ease: 'power3.out',
+      overwrite: 'auto',
+      onUpdate: function () {
+        img.style.transformOrigin = '0 0';
+      }
+    });
+  } else {
+    img.style.transform = 'translate(0px, 0px) scale(1)';
+    img.style.transformOrigin = '0 0';
+  }
+}
+
+function getNaturalFitScale() {
+  const container = getContainerBounds();
+  const natural = getImgNaturalSize();
+  if (!natural || container.w === 0 || container.h === 0) return 1;
+  const scaleX = container.w / natural.w;
+  const scaleY = container.h / natural.h;
+  return Math.min(scaleX, scaleY);
+}
+
+function applyZoomTransform(animate) {
+  const img = getZoomImg();
+  if (!img) return;
+  if (zoomLevel <= 1) {
+    animateZoomReset();
+    return;
+  }
+  const transform = 'translate(' + panX + 'px, ' + panY + 'px) scale(' + zoomLevel + ')';
+  if (animate && typeof gsap !== 'undefined') {
+    gsap.to(img, {
+      x: panX,
+      y: panY,
+      scale: zoomLevel,
+      duration: 0.3,
+      ease: 'power2.out',
+      overwrite: 'auto',
+      onUpdate: function () {
+        img.style.transformOrigin = '0 0';
+      }
+    });
+  } else {
+    img.style.transform = transform;
+    img.style.transformOrigin = '0 0';
+  }
+}
+
+function updateZoomTransform() {
+  const img = getZoomImg();
+  if (!img) return;
+  if (zoomLevel <= 1) {
+    img.style.transform = 'translate(0px, 0px) scale(1)';
+    img.style.transformOrigin = '0 0';
+  } else {
+    img.style.transform = 'translate(' + panX + 'px, ' + panY + 'px) scale(' + zoomLevel + ')';
+    img.style.transformOrigin = '0 0';
+  }
+}
+
+function clampPan() {
+  const container = getContainerBounds();
+  if (container.w === 0 || container.h === 0) return;
+  const displayedW = container.w * zoomLevel;
+  const displayedH = container.h * zoomLevel;
+  const maxPanX = Math.max(0, (displayedW - container.w) / 2);
+  const maxPanY = Math.max(0, (displayedH - container.h) / 2);
+  if (displayedW > container.w) {
+    panX = Math.min(Math.max(panX, -maxPanX * 1.5), maxPanX * 1.5);
+  } else {
+    panX = 0;
+  }
+  if (displayedH > container.h) {
+    panY = Math.min(Math.max(panY, -maxPanY * 1.5), maxPanY * 1.5);
+  } else {
+    panY = 0;
+  }
+}
+
 function handleImageDoubleClick(e) {
   e.preventDefault();
-  const container = document.getElementById('modalGalleryImgContainer');
+  const container = getZoomContainer();
   if (!container) return;
   const rect = container.getBoundingClientRect();
   const cx = e.clientX - rect.left;
   const cy = e.clientY - rect.top;
-
   if (isZoomed) {
-    resetZoom();
+    animateZoomReset();
     if (typeof startGalleryAutoSlide === 'function') startGalleryAutoSlide();
   } else {
     zoomLevel = 2.5;
     isZoomed = true;
-    panX = cx - zoomLevel * (cx - 0);
-    panY = cy - zoomLevel * (cy - 0);
+    panX = cx * (1 - zoomLevel);
+    panY = cy * (1 - zoomLevel);
     clampPan();
-    updateZoomTransform();
+    applyZoomTransform(true);
     if (typeof stopGalleryAutoSlide === 'function') stopGalleryAutoSlide();
   }
 }
@@ -40,7 +154,7 @@ function handleImageDragStart(e) {
   dragStartY = e.clientY;
   dragPanX = panX;
   dragPanY = panY;
-  const container = document.getElementById('modalGalleryImgContainer');
+  const container = getZoomContainer();
   if (container) container.style.cursor = 'grabbing';
   e.preventDefault();
 }
@@ -49,23 +163,23 @@ function handleImageDragMove(e) {
   if (!isDragging) return;
   panX = dragPanX + (e.clientX - dragStartX);
   panY = dragPanY + (e.clientY - dragStartY);
-  updateZoomTransform();
+  applyZoomTransform(false);
   e.preventDefault();
 }
 
-function handleImageDragEnd(e) {
+function handleImageDragEnd() {
   if (isDragging) {
     clampPan();
-    updateZoomTransform();
+    applyZoomTransform(true);
   }
   isDragging = false;
-  const container = document.getElementById('modalGalleryImgContainer');
+  const container = getZoomContainer();
   if (container) container.style.cursor = zoomLevel > 1 ? 'grab' : 'default';
 }
 
 function handleScrollZoom(e) {
   e.preventDefault();
-  const container = document.getElementById('modalGalleryImgContainer');
+  const container = getZoomContainer();
   if (!container) return;
   const rect = container.getBoundingClientRect();
   const cx = e.clientX - rect.left;
@@ -74,7 +188,7 @@ function handleScrollZoom(e) {
   const newZoom = Math.min(Math.max(zoomLevel + delta, 1), 5);
   if (newZoom === zoomLevel) return;
   if (newZoom <= 1) {
-    resetZoom();
+    animateZoomReset();
     if (typeof startGalleryAutoSlide === 'function') startGalleryAutoSlide();
     return;
   }
@@ -84,8 +198,14 @@ function handleScrollZoom(e) {
   zoomLevel = newZoom;
   isZoomed = true;
   clampPan();
-  updateZoomTransform();
+  applyZoomTransform(true);
   if (typeof stopGalleryAutoSlide === 'function') stopGalleryAutoSlide();
+}
+
+function getTouchDist(touches) {
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+  return Math.sqrt(dx * dx + dy * dy);
 }
 
 function handleTouchZoom(e) {
@@ -93,14 +213,14 @@ function handleTouchZoom(e) {
     e.preventDefault();
     const dist = getTouchDist(e.touches);
     if (lastPinchDist > 0) {
-      const container = document.getElementById('modalGalleryImgContainer');
+      const container = getZoomContainer();
       if (!container) return;
       const rect = container.getBoundingClientRect();
       const cx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
       const cy = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
       const newZoom = Math.min(Math.max(pinchStartZoom * (dist / lastPinchDist), 1), 5);
       if (newZoom <= 1) {
-        resetZoom();
+        animateZoomReset();
         if (typeof startGalleryAutoSlide === 'function') startGalleryAutoSlide();
         return;
       }
@@ -110,17 +230,11 @@ function handleTouchZoom(e) {
       zoomLevel = newZoom;
       isZoomed = true;
       clampPan();
-      updateZoomTransform();
+      applyZoomTransform(false);
       if (typeof stopGalleryAutoSlide === 'function') stopGalleryAutoSlide();
     }
     lastPinchDist = dist;
   }
-}
-
-function getTouchDist(touches) {
-  const dx = touches[0].clientX - touches[1].clientX;
-  const dy = touches[0].clientY - touches[1].clientY;
-  return Math.sqrt(dx * dx + dy * dy);
 }
 
 function resetZoom() {
@@ -130,76 +244,48 @@ function resetZoom() {
   panY = 0;
   isDragging = false;
   updateZoomTransform();
-  const container = document.getElementById('modalGalleryImgContainer');
+  const container = getZoomContainer();
   if (container) container.style.cursor = 'default';
 }
 
 function toggleZoom() {
   if (isZoomed) {
-    resetZoom();
+    animateZoomReset();
     if (typeof startGalleryAutoSlide === 'function') startGalleryAutoSlide();
   } else {
     zoomLevel = 2.5;
     isZoomed = true;
-    const container = document.getElementById('modalGalleryImgContainer');
+    const container = getZoomContainer();
     if (container) {
-      const rect = container.getBoundingClientRect();
-      panX = rect.width / 2 - zoomLevel * (rect.width / 2);
-      panY = rect.height / 2 - zoomLevel * (rect.height / 2);
+      panX = container.clientWidth / 2 - zoomLevel * (container.clientWidth / 2);
+      panY = container.clientHeight / 2 - zoomLevel * (container.clientHeight / 2);
     } else {
       panX = 0;
       panY = 0;
     }
     clampPan();
-    updateZoomTransform();
+    applyZoomTransform(true);
     if (typeof stopGalleryAutoSlide === 'function') stopGalleryAutoSlide();
-  }
-}
-
-function updateZoomTransform() {
-  const img = document.querySelector('#modalGalleryImgContainer img');
-  if (!img) return;
-  if (zoomLevel <= 1) {
-    img.style.transform = 'translate(0px, 0px) scale(1)';
-    img.style.transformOrigin = '0 0';
-  } else {
-    img.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
-    img.style.transformOrigin = '0 0';
-  }
-}
-
-function clampPan() {
-  const img = document.querySelector('#modalGalleryImgContainer img');
-  const container = document.getElementById('modalGalleryImgContainer');
-  if (!img || !container) return;
-
-  const imgRect = img.getBoundingClientRect();
-  const cRect = container.getBoundingClientRect();
-
-  const overflowX = (imgRect.width - cRect.width) / 2;
-  const overflowY = (imgRect.height - cRect.height) / 2;
-
-  if (overflowX > 0) {
-    panX = Math.min(Math.max(panX, -overflowX), overflowX);
-  } else {
-    panX = 0;
-  }
-
-  if (overflowY > 0) {
-    panY = Math.min(Math.max(panY, -overflowY), overflowY);
-  } else {
-    panY = 0;
   }
 }
 
 function initZoomControls() {
   if (zoomControlsInitialized) return;
   zoomControlsInitialized = true;
-
-  const container = document.getElementById('modalGalleryImgContainer');
+  const container = getZoomContainer();
   const img = container ? container.querySelector('img') : null;
   if (!container || !img) return;
 
+  let lastTap = 0;
+  img.addEventListener('touchend', function (e) {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTap;
+    if (tapLength < 300 && tapLength > 0) {
+      handleImageDoubleClick(e);
+      e.preventDefault();
+    }
+    lastTap = currentTime;
+  });
   img.addEventListener('dblclick', handleImageDoubleClick);
 
   img.addEventListener('mousedown', handleImageDragStart);
@@ -208,7 +294,7 @@ function initZoomControls() {
 
   container.addEventListener('wheel', handleScrollZoom, { passive: false });
 
-  container.addEventListener('touchstart', e => {
+  container.addEventListener('touchstart', function (e) {
     if (e.touches.length === 2) {
       lastPinchDist = getTouchDist(e.touches);
       pinchStartZoom = zoomLevel;
@@ -223,16 +309,18 @@ function initZoomControls() {
 
   container.addEventListener('touchmove', handleTouchZoom, { passive: false });
 
-  container.addEventListener('touchend', () => {
+  container.addEventListener('touchend', function () {
     if (isDragging) {
       clampPan();
-      updateZoomTransform();
+      applyZoomTransform(true);
     }
     isDragging = false;
     lastPinchDist = 0;
   }, { passive: true });
 
   updateZoomTransform();
+
+  img.addEventListener('dragstart', function (e) { e.preventDefault(); });
 }
 
 window.resetZoom = resetZoom;

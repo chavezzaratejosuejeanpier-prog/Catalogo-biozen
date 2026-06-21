@@ -1,10 +1,16 @@
 (function () {
+  var isMobile = window.innerWidth < 768;
+  var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
   function initCardTilt() {
+    if (isTouchDevice) return;
+
     var cards = document.querySelectorAll('.product-card');
     if (!cards.length) return;
 
+    var tiltIntensity = isMobile ? 0 : 6;
+
     cards.forEach(function (card) {
-      var rect = card.getBoundingClientRect();
       var isInside = false;
 
       card.addEventListener('mouseenter', function () {
@@ -12,14 +18,14 @@
       });
 
       card.addEventListener('mousemove', function (e) {
-        if (!isInside) return;
+        if (!isInside || tiltIntensity === 0) return;
         var rect = card.getBoundingClientRect();
         var x = e.clientX - rect.left;
         var y = e.clientY - rect.top;
         var centerX = rect.width / 2;
         var centerY = rect.height / 2;
-        var rotateX = ((y - centerY) / centerY) * -6;
-        var rotateY = ((x - centerX) / centerX) * 6;
+        var rotateX = ((y - centerY) / centerY) * -tiltIntensity;
+        var rotateY = ((x - centerX) / centerX) * tiltIntensity;
 
         gsap.to(card, {
           rotateX: rotateX,
@@ -51,6 +57,7 @@
   function init() {
     if (typeof gsap === 'undefined') return;
     document.addEventListener('DOMContentLoaded', function () {
+      isMobile = window.innerWidth < 768;
       setTimeout(initCardTilt, 500);
     });
     var grid = document.getElementById('productsGrid');
