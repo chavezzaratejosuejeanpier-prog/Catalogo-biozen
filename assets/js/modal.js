@@ -6,7 +6,6 @@ function openProductModal(productId) {
   const product = window.products.find(p => p.id === productId);
   if (!product) return;
 
-  // Use fullscreen overlay on mobile (< 768px)
   if (window.innerWidth < 768 && typeof openProductOverlay === 'function') {
     openProductOverlay(productId);
     return;
@@ -18,9 +17,6 @@ function openProductModal(productId) {
 
   document.getElementById('modalProductTitle').textContent = product.title;
   document.getElementById('modalProductCat').textContent = product.cat;
-
-  const shortEl = document.getElementById('modalProductShort');
-  if (shortEl) shortEl.textContent = product.short;
 
   updateGalleryView();
 
@@ -42,21 +38,17 @@ function openProductModal(productId) {
   const modalEl = document.getElementById('productModal');
   if (!modalEl) return;
 
-  // Reset any GSAP inline styles before showing
-  if (typeof gsap !== 'undefined') {
-    gsap.set(modalEl.querySelector('.gallery-hero'), { clearProps: 'all' });
-    gsap.set(modalEl.querySelector('.product-info-section'), { clearProps: 'all' });
-  }
-
   const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
   modal.show();
 
-  if (typeof gtag === 'function') {
-    gtag('event', 'view_item', {
-      currency: 'PEN',
-      items: [{ id: product.id, name: product.title, category: product.cat }]
-    });
-  }
+  setTimeout(function () {
+    if (typeof gtag === 'function') {
+      gtag('event', 'view_item', {
+        currency: 'PEN',
+        items: [{ id: product.id, name: product.title, category: product.cat }]
+      });
+    }
+  }, 100);
 }
 
 function updateGalleryView() {
@@ -81,7 +73,7 @@ function updateGalleryView() {
       const thumb = document.createElement('div');
       thumb.className = `gallery-thumb${i === galleryCurrentIndex ? ' active' : ''}`;
       thumb.dataset.index = i;
-      thumb.innerHTML = `<img src="${m.src}" alt="${galleryProduct.title} - Imagen ${i + 1}" loading="lazy">`;
+      thumb.innerHTML = `<img src="${m.src}" alt="${galleryProduct.title} - Imagen ${i + 1}">`;
       thumb.addEventListener('click', () => {
         galleryCurrentIndex = i;
         updateGalleryView();
@@ -120,11 +112,7 @@ function galleryPrev() {
 }
 
 function startGalleryAutoSlide() {
-  stopGalleryAutoSlide();
-  if (!galleryProduct || galleryProduct.media.length <= 1) return;
-  galleryAutoSlideTimer = setInterval(() => {
-    galleryNext();
-  }, 4000);
+  // Auto-slide disabled inside product view
 }
 
 function stopGalleryAutoSlide() {
@@ -139,50 +127,6 @@ function resetGalleryAutoSlide() {
   startGalleryAutoSlide();
 }
 
-function animateModalEntrance() {
-  if (typeof gsap === 'undefined') return;
-  const modalEl = document.getElementById('productModal');
-  if (!modalEl || !modalEl.classList.contains('show')) return;
-
-  const hero = modalEl.querySelector('.gallery-hero');
-  const info = modalEl.querySelector('.product-info-section');
-
-  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-  if (hero) {
-    tl.fromTo(hero,
-      { opacity: 0, y: 30, scale: 0.95 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.5 }
-    );
-  }
-
-  if (info) {
-    tl.fromTo(info,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.4 },
-      '-=0.15'
-    );
-
-    const accordionItems = info.querySelectorAll('.accordion-item');
-    if (accordionItems.length) {
-      tl.fromTo(accordionItems,
-        { opacity: 0, x: -15 },
-        { opacity: 1, x: 0, duration: 0.35, stagger: 0.08 },
-        '-=0.1'
-      );
-    }
-
-    const whatsappBtn = info.querySelector('.btn-whatsapp-premium');
-    if (whatsappBtn) {
-      tl.fromTo(whatsappBtn,
-        { opacity: 0, y: 15 },
-        { opacity: 1, y: 0, duration: 0.35 },
-        '-=0.15'
-      );
-    }
-  }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   const modalEl = document.getElementById('productModal');
   if (!modalEl) return;
@@ -193,9 +137,8 @@ document.addEventListener('DOMContentLoaded', () => {
     resetZoom();
   });
 
-  modalEl.addEventListener('shown.bs.modal', () => {
-    startGalleryAutoSlide();
-    animateModalEntrance();
+  modalEl.addEventListener('shown.bs.modal', function () {
+    // No auto-slide in product view
   });
 
   document.getElementById('modalGalleryPrev')?.addEventListener('click', galleryPrev);

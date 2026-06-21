@@ -386,9 +386,8 @@
           <div class="gallery-hero">
             <div class="gallery-main-img">
               <div class="gallery-img-container" id="modalGalleryImgContainer">
-                <img id="modalGalleryImg" src="" alt="">
+                <img id="modalGalleryImg" src="" alt="" fetchpriority="high">
               </div>
-              <span class="gallery-tap-hint">Toca para ampliar</span>
               <button class="gallery-nav-btn gallery-nav-prev" id="modalGalleryPrev" aria-label="Anterior">
                 <i class="bi bi-chevron-left"></i>
               </button>
@@ -404,7 +403,6 @@
           <div class="product-info-section">
             <span class="modal-category-badge" id="modalProductCat"></span>
             <h2 class="modal-product-title" id="modalProductTitle">Producto</h2>
-            <p class="modal-product-short" id="modalProductShort"></p>
 
             <!-- Premium Accordion -->
             <div class="accordion premium-accordion" id="modalAccordion">
@@ -690,7 +688,6 @@
 
     <div class="overlay-body">
       <div class="overlay-content">
-        <p class="overlay-short"></p>
 
         <div class="overlay-section">
           <div class="overlay-section-title"><i class="bi bi-star"></i> ¿Qué hace por ti?</div>
@@ -737,11 +734,9 @@
   <script defer src="assets/js/modal.js"></script>
   <script defer src="assets/js/gsap-effects.js"></script>
   <script defer src="assets/js/scrolltrigger.js"></script>
-  <script defer src="assets/js/tilt-3d.js"></script>
   <script defer src="assets/js/analytics.js"></script>
   <script defer src="assets/js/main.js"></script>
   <script defer src="assets/js/app.js"></script>
-
 
   <!-- ===== ANALYTICS SCRIPTS (uncomment and configure) ===== -->
   <!--

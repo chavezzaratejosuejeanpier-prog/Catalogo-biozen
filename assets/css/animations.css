@@ -333,20 +333,6 @@
   animation: navbarScroll 0.35s var(--transition) forwards;
 }
 
-/* ---------- Image Zoom Container ---------- */
-
-.img-zoom-container {
-  overflow: hidden;
-}
-
-.img-zoom-container img {
-  transition: transform 0.5s var(--transition);
-}
-
-.img-zoom-container:hover img {
-  transform: scale(1.12);
-}
-
 /* ---------- WhatsApp Float ---------- */
 
 .whatsapp-float {
