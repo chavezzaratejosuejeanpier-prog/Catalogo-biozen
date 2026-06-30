@@ -135,44 +135,6 @@
     });
   }
 
-  function initCTAEntrance() {
-    var ctaSection = document.querySelector('.cta-section');
-    if (!ctaSection) return;
-
-    gsap.fromTo(ctaSection,
-      { opacity: 0, scale: 0.92 },
-      {
-        opacity: 1,
-        scale: 1,
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: ctaSection,
-          start: 'top 82%',
-          toggleActions: 'play none none none',
-          once: true
-        }
-      }
-    );
-
-    var ctaContent = ctaSection.querySelector('.cta-title, .cta-text, .btn');
-    if (ctaContent) {
-      gsap.from(ctaSection.querySelectorAll('.cta-title, .cta-text, .btn'), {
-        opacity: 0,
-        y: 30,
-        duration: 0.8,
-        ease: 'power2.out',
-        stagger: 0.15,
-        scrollTrigger: {
-          trigger: ctaSection,
-          start: 'top 78%',
-          toggleActions: 'play none none none',
-          once: true
-        }
-      });
-    }
-  }
-
   function initCounters() {
     var counters = document.querySelectorAll('.hero-stat-number');
     if (!counters.length) return;
@@ -212,7 +174,6 @@
     initProductCardsReveal();
     initTrustMatrix();
     initTestimonialCards();
-    initCTAEntrance();
     initCounters();
 
     ScrollTrigger.refresh();

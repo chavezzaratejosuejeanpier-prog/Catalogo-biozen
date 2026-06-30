@@ -16,7 +16,6 @@ function openProductModal(productId) {
   resetZoom();
 
   document.getElementById('modalProductTitle').textContent = product.title;
-  document.getElementById('modalProductCat').textContent = product.cat;
 
   updateGalleryView();
 
@@ -45,7 +44,7 @@ function openProductModal(productId) {
     if (typeof gtag === 'function') {
       gtag('event', 'view_item', {
         currency: 'PEN',
-        items: [{ id: product.id, name: product.title, category: product.cat }]
+        items: [{ id: product.id, name: product.title }]
       });
     }
   }, 100);

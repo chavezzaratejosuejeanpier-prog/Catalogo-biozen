@@ -1,0 +1,251 @@
+/* ============================================================
+   EXPERIENCIAS REALES CON BIOZEN — Premium Horizontal Carousel
+   Mobile First — Apple/Airbnb inspired
+   ============================================================ */
+
+.experiencias-section {
+  background: var(--bg-white);
+  position: relative;
+  overflow: hidden;
+}
+
+.experiencias-section .section-subtitle {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===== CAROUSEL CONTAINER ===== */
+.testimonials-carousel {
+  position: relative;
+  width: 100%;
+  user-select: none;
+}
+
+.testimonials-viewport {
+  overflow: hidden;
+  position: relative;
+  padding: 1.25rem 0 1.75rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===== TRACK ===== */
+.testimonials-track {
+  display: flex;
+  align-items: flex-start;
+  will-change: transform;
+  touch-action: none;
+  cursor: grab;
+  gap: 0.75rem;
+  perspective: 1200px;
+}
+
+.testimonials-viewport.dragging .testimonials-track {
+  cursor: grabbing;
+}
+
+/* ===== CARD ===== */
+.testimonials-card {
+  flex: 0 0 auto;
+  width: 80vw;
+  max-width: 320px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  background: var(--bg-white);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  will-change: transform, opacity;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  aspect-ratio: 3 / 4;
+  max-height: 440px;
+  transition: box-shadow 0.5s ease;
+}
+
+.testimonials-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.05));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.testimonials-card img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  background: var(--bg-gray);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.testimonials-card img.loaded {
+  opacity: 1;
+}
+
+/* ===== SKELETON ===== */
+.testimonials-skeleton {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--bg-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.testimonials-skeleton::after {
+  content: '';
+  width: 40%;
+  height: 40%;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ===== ERROR PLACEHOLDER ===== */
+.testimonials-error {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--bg-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+  font-size: 1.5rem;
+}
+
+/* ===== ACTIVE (centered) CARD ===== */
+.testimonials-card.active {
+  box-shadow: 0 8px 28px -6px rgba(0, 0, 0, 0.07), 0 0 0 1px rgba(13, 148, 136, 0.06);
+}
+
+/* ===== FOCUS ===== */
+.testimonials-card:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+/* ===== HOVER (Desktop only) ===== */
+@media (hover: hover) and (pointer: fine) {
+  .testimonials-card:not(.dragging):hover {
+    box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(13, 148, 136, 0.04);
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE FIRST
+   ============================================================ */
+
+/* ----- Móviles (320px - 767px) ----- */
+/* default styles above */
+
+/* ----- Tablets (768px - 1023px) ----- */
+@media (min-width: 768px) {
+  .testimonials-card {
+    width: calc(50vw - 2rem);
+    max-width: 360px;
+    max-height: 460px;
+  }
+  .testimonials-track {
+    gap: 1rem;
+  }
+  .testimonials-viewport {
+    padding: 1.5rem 0 2rem;
+  }
+}
+
+/* ----- Laptops & Desktop (1024px+) ----- */
+@media (min-width: 1024px) {
+  .testimonials-card {
+    width: calc(33.333vw - 2rem);
+    max-width: 380px;
+    max-height: 480px;
+    border-radius: 18px;
+  }
+  .testimonials-track {
+    gap: 1.25rem;
+  }
+  .testimonials-viewport {
+    padding: 1.75rem 0 2.25rem;
+  }
+}
+
+/* ----- 1440px+ ----- */
+@media (min-width: 1440px) {
+  .testimonials-card {
+    width: min(400px, calc(33.333vw - 2.5rem));
+    max-height: 520px;
+  }
+  .testimonials-track {
+    gap: 1.5rem;
+  }
+}
+
+/* ----- 360px ----- */
+@media (max-width: 360px) {
+  .testimonials-card {
+    width: 76vw;
+    max-width: 260px;
+    max-height: 380px;
+    border-radius: 14px;
+  }
+  .testimonials-track {
+    gap: 0.5rem;
+  }
+  .testimonials-viewport {
+    padding: 1rem 0 1.25rem;
+  }
+}
+
+/* ===== TOUCH ===== */
+@media (hover: none) and (pointer: coarse) {
+  .testimonials-track {
+    cursor: default;
+  }
+}
+
+/* ===== ORIENTATION LANDSCAPE ===== */
+@media (max-height: 500px) and (orientation: landscape) {
+  .testimonials-card {
+    max-height: 70vh;
+    aspect-ratio: auto;
+  }
+  .testimonials-viewport {
+    padding: 0.75rem 0;
+  }
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  .testimonials-card { transition: none; }
+  .testimonials-card img { transition: none; }
+  .testimonials-skeleton::after { animation: none; }
+}
+
+/* ===== HIGH CONTRAST ===== */
+@media (prefers-contrast: high) {
+  .testimonials-card {
+    border-width: 2px;
+    border-color: var(--border);
+  }
+}

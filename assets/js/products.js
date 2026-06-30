@@ -17,9 +17,8 @@ function renderProductsGrid(productsList) {
   if (!grid) return;
   grid.innerHTML = productsList.map((product, index) => `
     <div class="col-lg-3 col-md-4 col-sm-6 reveal reveal-slideUp stagger-${Math.min(index + 1, 12)}">
-      <div class="product-card" data-product-id="${product.id}" data-product-cat="${product.cat}">
+      <div class="product-card" data-product-id="${product.id}">
         <div class="product-card-img">
-          <span class="product-card-cat">${product.cat}</span>
           ${carouselProducts(product.media)}
         </div>
         <div class="product-card-body">
@@ -46,26 +45,6 @@ function renderProductsGrid(productsList) {
       });
     });
   }
-}
-
-function filterProducts(category) {
-  const list = category === 'Todos'
-    ? window.products
-    : window.products.filter(p => p.cat === category);
-  renderProductsGrid(list);
-}
-
-function initFilterButtons() {
-  const filterBar = document.querySelector('#filterBar');
-  if (!filterBar) return;
-  filterBar.addEventListener('click', e => {
-    const pill = e.target.closest('.filter-pill');
-    if (!pill) return;
-    filterBar.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-    pill.classList.add('active');
-    const category = pill.dataset.filter || 'Todos';
-    filterProducts(category);
-  });
 }
 
 function initCardClickHandlers() {
@@ -120,10 +99,8 @@ function initProductCardCarousels() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  initFilterButtons();
   initCardClickHandlers();
 });
 
 window.renderProductsGrid = renderProductsGrid;
-window.filterProducts = filterProducts;
 window.carouselProducts = carouselProducts;

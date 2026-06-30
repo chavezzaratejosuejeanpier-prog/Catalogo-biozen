@@ -166,6 +166,7 @@
   <link href="assets/css/animations.css" rel="stylesheet">
   <link href="assets/css/responsive.css" rel="stylesheet">
   <link href="assets/css/app.css" rel="stylesheet">
+  <link href="assets/css/testimonials.css" rel="stylesheet">
 
   <style>
     .trust-grid {
@@ -229,12 +230,6 @@
       color: var(--primary);
       opacity: 0.6;
       animation: float 3s ease-in-out infinite;
-    }
-    .filter-pill[data-filter="all"] {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #fff;
-      border-color: transparent;
-      box-shadow: var(--shadow-green);
     }
   </style>
 </head>
@@ -401,7 +396,6 @@
 
           <!-- Right Column: Product Info -->
           <div class="product-info-section">
-            <span class="modal-category-badge" id="modalProductCat"></span>
             <h2 class="modal-product-title" id="modalProductTitle">Producto</h2>
 
             <!-- Premium Accordion -->
@@ -450,34 +444,22 @@
     </div>
   </div>
 
-  <!-- ===== TESTIMONIALS SECTION ===== -->
-  <section class="testimonials-section section-padding" id="testimonios">
+  <!-- ===== EXPERIENCIAS REALES SECTION ===== -->
+  <section class="experiencias-section section-padding" id="testimonios">
     <div class="container">
       <div class="text-center mb-5">
-        <h2 class="section-title reveal reveal-slideUp">Lo que dicen nuestros <span class="gradient-text">clientes</span></h2>
-        <p class="section-subtitle reveal reveal-slideUp stagger-1">Próximamente las experiencias de quienes ya confían en BIOZEN</p>
+        <h2 class="section-title reveal reveal-slideUp">Experiencias Reales con <span class="gradient-text">BIOZEN</span></h2>
+        <p class="section-subtitle reveal reveal-slideUp stagger-1">Conoce algunas conversaciones reales compartidas por nuestros clientes. Cada imagen refleja experiencias auténticas con nuestros productos y nuestro servicio.</p>
       </div>
-      <div class="testimonials-placeholder reveal reveal-slideUp stagger-2">
-        <div class="testimonials-empty">
-          <i class="bi bi-chat-square-quote"></i>
-          <p>Estamos recopilando las experiencias de nuestros clientes para compartirlas contigo.</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- ===== CTA CONVERSION SECTION ===== -->
-  <section class="cta-section" id="cta-final">
-    <div class="container text-center">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <h2 class="cta-title reveal reveal-slideUp">Tu bienestar no puede esperar más.</h2>
-          <p class="cta-text reveal reveal-slideUp stagger-1">Habla con nuestros especialistas y encuentra la fórmula ideal para ti.</p>
-          <div class="reveal reveal-scaleIn stagger-2">
-            <a href="javascript:void(0)" onclick="openWhatsAppGeneric()" class="btn btn-custom btn-whatsapp btn-magnetic" style="font-size:1.15rem;padding:16px 40px;">
-              <i class="bi bi-whatsapp"></i> Quiero mi asesoría gratuita
-            </a>
+      <div class="testimonials-carousel reveal reveal-slideUp stagger-2" role="region" aria-label="Galería de experiencias reales de clientes">
+        <div class="testimonials-viewport">
+          <div class="testimonials-track" role="list">
+            <!-- Cards rendered by testimonials.js -->
           </div>
+        </div>
+        <div class="text-center mt-3 mt-md-4">
+          <small class="text-muted" style="font-size:0.8rem;opacity:0.6;">Desliza para ver más experiencias</small>
         </div>
       </div>
     </div>
@@ -725,6 +707,7 @@
   </a>
 
   <!-- ===== JAVASCRIPT ===== -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
@@ -737,6 +720,7 @@
   <script defer src="assets/js/analytics.js"></script>
   <script defer src="assets/js/main.js"></script>
   <script defer src="assets/js/app.js"></script>
+  <script defer src="assets/js/testimonials.js"></script>
 
   <!-- ===== ANALYTICS SCRIPTS (uncomment and configure) ===== -->
   <!--
@@ -772,6 +756,8 @@
     })(window, document, "clarity", "script", "YOUR_CLARITY_ID");
   </script>
   -->
+
+
 
 </body>
 </html>

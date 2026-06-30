@@ -118,7 +118,6 @@
 
     // Populate content
     overlay.querySelector('.overlay-title').textContent = product.title;
-    overlay.querySelector('.overlay-category').textContent = product.cat;
 
     // Gallery
     var track = overlay.querySelector('.gallery-track');
@@ -549,7 +548,6 @@
       var imgCount = product.media ? product.media.length : 0;
       return '<div class="product-scroll-card" data-product-id="' + product.id + '">' +
         '<div class="scroll-card-img">' +
-          '<span class="scroll-card-badge">' + product.cat + '</span>' +
           '<img src="' + imgSrc + '" alt="' + product.title + '" loading="lazy">' +
           (imgCount > 1 ? '<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.5);color:#fff;font-size:0.65rem;padding:2px 8px;border-radius:50px;z-index:2;backdrop-filter:blur(4px)">' + imgCount + ' fotos</div>' : '') +
         '</div>' +
