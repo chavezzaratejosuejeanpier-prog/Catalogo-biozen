@@ -1,25 +1,29 @@
-function carouselProducts(mediaArray) {
+function carouselProducts(mediaArray, productTitle) {
+  var safeTitle = productTitle || 'Producto BIOZEN';
   if (!mediaArray || mediaArray.length === 0) return '';
   if (mediaArray.length === 1) {
-    return `<img src="${mediaArray[0].src}" alt="" loading="lazy" class="active">`;
+    return '<img src="' + mediaArray[0].src + '" alt="' + safeTitle + ' - BIOZEN" loading="lazy" class="active" width="400" height="400">';
   }
-  const slides = mediaArray.map((m, i) =>
-    `<img src="${m.src}" alt="" loading="lazy" class="${i === 0 ? 'active' : ''}" data-index="${i}">`
-  ).join('');
-  const dots = mediaArray.map((_, i) =>
-    `<span class="pcard-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></span>`
-  ).join('');
-  return `<div class="pcard-carousel">${slides}<div class="pcard-dots">${dots}</div></div>`;
+  var slides = mediaArray.map(function (m, i) {
+    return '<img src="' + m.src + '" alt="' + safeTitle + ' - Imagen ' + (i + 1) + '" loading="lazy" class="' + (i === 0 ? 'active' : '') + '" data-index="' + i + '" width="400" height="400">';
+  }).join('');
+  var dots = mediaArray.map(function (_, i) {
+    return '<span class="pcard-dot ' + (i === 0 ? 'active' : '') + '" data-index="' + i + '"></span>';
+  }).join('');
+  return '<div class="pcard-carousel">' + slides + '<div class="pcard-dots">' + dots + '</div></div>';
 }
 
 function renderProductsGrid(productsList) {
   const grid = document.getElementById('productsGrid');
   if (!grid) return;
+  var skel = document.getElementById('productsSkeleton');
+  if (skel) skel.remove();
   grid.innerHTML = productsList.map((product, index) => `
     <div class="col-lg-3 col-md-4 col-sm-6 reveal reveal-slideUp stagger-${Math.min(index + 1, 12)}">
       <div class="product-card" data-product-id="${product.id}">
         <div class="product-card-img">
-          ${carouselProducts(product.media)}
+          ${product.cat ? `<span class="product-card-cat">${product.cat}</span>` : ''}
+          ${carouselProducts(product.media, product.title)}
         </div>
         <div class="product-card-body">
           <h3 class="product-card-title">${product.title}</h3>

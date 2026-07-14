@@ -27,7 +27,6 @@
       });
     });
 
-    // Update active state on scroll
     var sections = [];
     items.forEach(function (item) {
       var target = item.getAttribute('data-target');
@@ -57,7 +56,6 @@
     window.addEventListener('scroll', updateActiveNav, { passive: true });
     updateActiveNav();
 
-    // Show nav on mobile after scroll
     setTimeout(function () {
       nav.classList.add('visible');
     }, 300);
@@ -98,8 +96,7 @@
     currentSlide: 0,
     dragStartY: 0,
     dragOffset: 0,
-    isDragging: false,
-    isZoomed: false
+    isDragging: false
   };
 
   function openProductOverlay(productId) {
@@ -116,20 +113,27 @@
     document.body.style.overflow = 'hidden';
     document.body.classList.add('overlay-open');
 
-    // Populate content
     overlay.querySelector('.overlay-title').textContent = product.title;
+    var catEl = overlay.querySelector('.overlay-category');
+    if (catEl) catEl.textContent = product.cat || '';
 
-    // Gallery
     var track = overlay.querySelector('.gallery-track');
     track.innerHTML = '';
     product.media.forEach(function (m, i) {
       var slide = document.createElement('div');
       slide.className = 'gallery-slide';
-      slide.innerHTML = '<img src="' + m.src + '" alt="' + product.title + ' - ' + (i + 1) + '" loading="lazy">';
+      var img = document.createElement('img');
+      img.src = m.src;
+      img.alt = product.title + ' - ' + (i + 1);
+      img.width = 400;
+      img.height = 400;
+      img.loading = 'lazy';
+      img.onload = function () { slide.classList.add('loaded'); };
+      if (img.complete) slide.classList.add('loaded');
+      slide.appendChild(img);
       track.appendChild(slide);
     });
 
-    // Gallery dots
     var dotsContainer = overlay.querySelector('.gallery-dots');
     if (dotsContainer) {
       dotsContainer.innerHTML = '';
@@ -142,21 +146,17 @@
       }
     }
 
-    // Gallery counter
     var counter = overlay.querySelector('.gallery-counter');
     if (counter) {
       counter.textContent = product.media.length > 1 ? '1 / ' + product.media.length : '';
     }
 
-    // Reset gallery position
     updateGalleryPosition(0, false);
 
-    // Content sections
     var benefitsBody = overlay.querySelector('.overlay-section-body.benefits-body');
     if (benefitsBody) {
       benefitsBody.innerHTML = product.full ? product.full.replace(/<br>/g, '') : '';
       if (benefitsBody.querySelector('ul')) {
-        // Already has list
       } else {
         var items = product.full ? product.full.split('<br>').filter(Boolean) : [];
         if (items.length) {
@@ -175,7 +175,6 @@
     overlay.querySelector('.ingredients-body').textContent = product.ing || '';
     overlay.querySelector('.usage-body').textContent = product.use || '';
 
-    // WhatsApp button
     var whatsappBtn = overlay.querySelector('.overlay-whatsapp-btn');
     if (whatsappBtn) {
       whatsappBtn.onclick = function () {
@@ -183,9 +182,9 @@
       };
     }
 
-    // Instant slide-up
     overlay.style.visibility = 'visible';
     overlay.style.pointerEvents = 'auto';
+
     if (typeof gsap !== 'undefined') {
       gsap.set(overlay, { y: '100%' });
       gsap.to(overlay, {
@@ -194,14 +193,15 @@
         ease: 'power2.out',
         overwrite: 'auto'
       });
+    } else {
+      overlay.style.transform = 'translateY(0)';
+      overlay.style.transition = 'transform 0.25s ease';
     }
 
-    // Analytics
     if (typeof TrackProductView === 'function') {
       TrackProductView(product.id, product.title);
     }
 
-    // Init gallery gestures
     initOverlayGalleryGestures();
   }
 
@@ -215,6 +215,8 @@
 
     overlay.style.visibility = 'hidden';
     overlay.style.pointerEvents = 'none';
+    overlay.style.transform = '';
+    overlay.style.transition = '';
     if (typeof gsap !== 'undefined') {
       gsap.set(overlay, { y: '100%', clearProps: 'all' });
     }
@@ -236,55 +238,46 @@
     }
     track.style.transform = 'translateX(' + offset + '%)';
 
-    // Update dots
     var dots = overlay.querySelectorAll('.gallery-dot');
     dots.forEach(function (d, i) {
       d.classList.toggle('active', i === index);
     });
 
-    // Update counter
     var counter = overlay.querySelector('.gallery-counter');
     if (counter && overlayState.currentProduct) {
       counter.textContent = (index + 1) + ' / ' + overlayState.currentProduct.media.length;
     }
 
-    // Re-enable transitions after a frame
     if (animate === false) {
       requestAnimationFrame(function () {
         track.style.transition = 'transform 0.3s cubic-bezier(0.4,0,0.2,1)';
       });
     }
-
-    // Notify zoom system to reset
-    var evt = new CustomEvent('gallery-slide-changed', { bubbles: true });
-    track.dispatchEvent(evt);
   }
 
   /* ================================
      GALLERY SWIPE GESTURES
-  ================================ */
+   ================================ */
 
   function initOverlayGalleryGestures() {
     var overlay = document.getElementById('productOverlay');
     if (!overlay) return;
     var gallery = overlay.querySelector('.overlay-gallery');
     var track = overlay.querySelector('.gallery-track');
-    if (!gallery || !track || !overlayState.currentProduct) return;
+    if (!gallery || !track) return;
 
-    // ALWAYS initialize zoom, even for single-image products
-    initOverlayZoom(gallery);
-
-    if (overlayState.currentProduct.media.length <= 1) return;
+    if (gallery._swipeInit) return;
+    gallery._swipeInit = true;
 
     var startX = 0;
     var currentX = 0;
-    var isSwiping = false;
     var slideWidth = 0;
+    var isSwiping = false;
 
     function onTouchStart(e) {
-      if (overlayState.isDragging || overlayState.isZoomed || e.touches.length !== 1) return;
-      var touch = e.touches[0];
-      startX = touch.clientX;
+      if (!overlayState.currentProduct || overlayState.currentProduct.media.length <= 1) return;
+      if (e.touches.length !== 1) return;
+      startX = e.touches[0].clientX;
       currentX = startX;
       isSwiping = true;
       slideWidth = gallery.offsetWidth;
@@ -294,22 +287,18 @@
 
     function onTouchMove(e) {
       if (!isSwiping) return;
-      var touch = e.touches[0];
-      currentX = touch.clientX;
-      var diff = currentX - startX;
-      var baseOffset = -overlayState.currentSlide * slideWidth;
-      track.style.transform = 'translateX(' + (baseOffset + diff) + 'px)';
+      if (e.touches.length !== 1) return;
+      currentX = e.touches[0].clientX;
+      track.style.transform = 'translateX(' + (-overlayState.currentSlide * slideWidth + (currentX - startX)) + 'px)';
     }
 
     function onTouchEnd() {
       if (!isSwiping) return;
       isSwiping = false;
       track.classList.remove('dragging');
-
       var diff = currentX - startX;
-      var threshold = slideWidth * 0.2;
-
-      if (Math.abs(diff) > threshold) {
+      if (!overlayState.currentProduct) return;
+      if (Math.abs(diff) > slideWidth * 0.2) {
         if (diff < 0 && overlayState.currentSlide < overlayState.currentProduct.media.length - 1) {
           updateGalleryPosition(overlayState.currentSlide + 1, true);
         } else if (diff > 0 && overlayState.currentSlide > 0) {
@@ -322,135 +311,17 @@
       }
     }
 
-    gallery.removeEventListener('touchstart', onTouchStart);
-    gallery.removeEventListener('touchmove', onTouchMove);
-    gallery.removeEventListener('touchend', onTouchEnd);
+    function onTouchCancel() {
+      if (!isSwiping) return;
+      isSwiping = false;
+      track.classList.remove('dragging');
+      updateGalleryPosition(overlayState.currentSlide, true);
+    }
 
     gallery.addEventListener('touchstart', onTouchStart, { passive: true });
     gallery.addEventListener('touchmove', onTouchMove, { passive: true });
     gallery.addEventListener('touchend', onTouchEnd, { passive: true });
-  }
-
-  function initOverlayZoom(gallery) {
-    if (gallery.dataset.zoomInit) return;
-    gallery.dataset.zoomInit = '1';
-
-    var z = {
-      scale: 1, minScale: 1, maxScale: 5,
-      tx: 0, ty: 0,
-      panning: false, panSX: 0, panSY: 0,
-      lastPinchDist: 0,
-      lastTapTime: 0, lastTapX: 0, lastTapY: 0
-    };
-
-    function getActiveSlide() {
-      var slides = gallery.querySelectorAll('.gallery-slide');
-      return slides[overlayState.currentSlide] || null;
-    }
-
-    function getActiveImg() {
-      var slide = getActiveSlide();
-      return slide ? slide.querySelector('img') : null;
-    }
-
-    function apply(animate) {
-      var img = getActiveImg();
-      if (!img) return;
-      img.style.transform = 'translate(' + z.tx + 'px,' + z.ty + 'px) scale(' + z.scale + ')';
-      img.style.transition = animate ? 'transform 0.15s cubic-bezier(0.4,0,0.2,1)' : 'none';
-      overlayState.isZoomed = z.scale > 1;
-      var s = getActiveSlide();
-      if (s) s.classList.toggle('zoomed', z.scale > 1);
-    }
-
-    function resetZoom() {
-      z.scale = 1; z.tx = 0; z.ty = 0;
-      overlayState.isZoomed = false;
-      var s = getActiveSlide();
-      if (s) s.classList.remove('zoomed');
-      var img = getActiveImg();
-      if (img) { img.style.transform = ''; img.style.transition = ''; }
-    }
-
-    function clamp(r) {
-      var m = (z.scale - 1) * 0.5;
-      z.tx = Math.max(-r.width * m, Math.min(r.width * m, z.tx));
-      z.ty = Math.max(-r.height * m, Math.min(r.height * m, z.ty));
-    }
-
-    function zoomAt(scale, cx, cy) {
-      var s = getActiveSlide();
-      if (!s) return;
-      var r = s.getBoundingClientRect();
-      var prev = z.scale;
-      z.scale = Math.max(z.minScale, Math.min(z.maxScale, scale));
-      z.tx = cx - (cx - z.tx) * (z.scale / prev);
-      z.ty = cy - (cy - z.ty) * (z.scale / prev);
-      clamp(r);
-      apply(false);
-    }
-
-    gallery.addEventListener('wheel', function (e) {
-      e.preventDefault();
-      var s = getActiveSlide(); if (!s) return;
-      var r = s.getBoundingClientRect();
-      zoomAt(z.scale * (1 - e.deltaY * 0.002), e.clientX - r.left, e.clientY - r.top);
-    }, { passive: false });
-
-    gallery.addEventListener('dblclick', function (e) {
-      if (z.scale > 1) { resetZoom(); return; }
-      var s = getActiveSlide(); if (!s) return;
-      var r = s.getBoundingClientRect();
-      zoomAt(2.5, e.clientX - r.left, e.clientY - r.top);
-    });
-
-    gallery.addEventListener('touchstart', function (e) {
-      if (e.touches.length === 1) {
-        if (overlayState.isZoomed && !overlayState.isDragging) {
-          z.panning = true;
-          z.panSX = e.touches[0].clientX - z.tx;
-          z.panSY = e.touches[0].clientY - z.ty;
-        }
-      } else if (e.touches.length === 2) {
-        z.panning = false;
-        var dx = e.touches[0].clientX - e.touches[1].clientX;
-        var dy = e.touches[0].clientY - e.touches[1].clientY;
-        z.lastPinchDist = Math.sqrt(dx * dx + dy * dy);
-      }
-    }, { passive: false });
-
-    gallery.addEventListener('touchmove', function (e) {
-      if (e.touches.length === 1 && z.panning) {
-        z.tx = e.touches[0].clientX - z.panSX;
-        z.ty = e.touches[0].clientY - z.panSY;
-        var s = getActiveSlide(); if (s) clamp(s.getBoundingClientRect());
-        apply(false);
-      } else if (e.touches.length === 2 && z.lastPinchDist > 0) {
-        e.preventDefault();
-        var dx = e.touches[0].clientX - e.touches[1].clientX;
-        var dy = e.touches[0].clientY - e.touches[1].clientY;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        var cx = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-        var cy = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-        var s = getActiveSlide(); if (s) { var r = s.getBoundingClientRect(); zoomAt(z.scale * (dist / z.lastPinchDist), cx - r.left, cy - r.top); }
-        z.lastPinchDist = dist;
-      }
-    }, { passive: false });
-
-    gallery.addEventListener('touchend', function (e) {
-      z.panning = false;
-      if (e.touches.length < 2) z.lastPinchDist = 0;
-      if (e.changedTouches.length === 1 && e.touches.length === 0) {
-        var t = e.changedTouches[0];
-        var now = Date.now();
-        if (now - z.lastTapTime < 300 && Math.abs(t.clientX - z.lastTapX) < 30 && Math.abs(t.clientY - z.lastTapY) < 30) {
-          if (overlayState.isZoomed) { resetZoom(); } else { var s = getActiveSlide(); if (s) { var r = s.getBoundingClientRect(); zoomAt(2.5, t.clientX - r.left, t.clientY - r.top); } }
-          z.lastTapTime = 0;
-        } else { z.lastTapTime = now; z.lastTapX = t.clientX; z.lastTapY = t.clientY; }
-      }
-    }, { passive: false });
-
-    gallery.addEventListener('gallery-slide-changed', resetZoom);
+    gallery.addEventListener('touchcancel', onTouchCancel, { passive: true });
   }
 
   /* ================================
@@ -469,7 +340,6 @@
 
     function onTouchStart(e) {
       if (overlayState.isDragging) return;
-      // Only allow pull-to-close when at top of scroll
       var body = overlay.querySelector('.overlay-body');
       if (body && body.scrollTop > 0) return;
 
@@ -488,13 +358,12 @@
       currentY = touch.clientY;
       var diff = currentY - startY;
 
-      if (diff < 0) return; // Only pull down
+      if (diff < 0) return;
 
       overlayState.dragOffset = diff;
       overlay.style.transform = 'translateY(' + diff + 'px)';
       overlay.style.transition = 'none';
 
-      // Show pull indicator
       var indicator = overlay.querySelector('.overlay-pull-indicator');
       if (indicator) {
         indicator.classList.toggle('visible', diff > 30);
@@ -531,11 +400,6 @@
   }
 
   /* ================================
-     PRODUCT CARD CLICK -> OVERLAY
-     Handled by modal.js -> openProductModal -> redirects to overlay on mobile
-  ================================ */
-
-  /* ================================
      HORIZONTAL SCROLL CATALOG
   ================================ */
 
@@ -548,16 +412,16 @@
       var imgCount = product.media ? product.media.length : 0;
       return '<div class="product-scroll-card" data-product-id="' + product.id + '">' +
         '<div class="scroll-card-img">' +
-          '<img src="' + imgSrc + '" alt="' + product.title + '" loading="lazy">' +
+          '<img src="' + imgSrc + '" alt="' + product.title + '" loading="lazy" width="300" height="300">' +
           (imgCount > 1 ? '<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.5);color:#fff;font-size:0.65rem;padding:2px 8px;border-radius:50px;z-index:2;backdrop-filter:blur(4px)">' + imgCount + ' fotos</div>' : '') +
         '</div>' +
         '<div class="scroll-card-body">' +
           '<h3 class="scroll-card-title">' + product.title + '</h3>' +
+          '<button class="btn btn-whatsapp-xs" onclick="event.stopPropagation(); openWhatsApp(\'' + product.title + '\')"><i class="bi bi-whatsapp"></i> Consultar</button>' +
         '</div>' +
       '</div>';
     }).join('');
 
-    // Click handlers for scroll cards
     container.addEventListener('click', function (e) {
       var card = e.target.closest('.product-scroll-card');
       if (!card) return;
@@ -581,14 +445,12 @@
       closeBtn.addEventListener('click', closeProductOverlay);
     }
 
-    // Backdrop click to close
     overlay.addEventListener('click', function (e) {
       if (e.target === overlay) {
         closeProductOverlay();
       }
     });
 
-    // Keyboard escape
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && overlayState.isOpen) {
         closeProductOverlay();
@@ -607,7 +469,6 @@
     if (!body) return;
 
     body.addEventListener('touchmove', function (e) {
-      // Allow scroll within body
       e.stopPropagation();
     }, { passive: true });
   }
@@ -619,7 +480,6 @@
   function initResponsiveSwitch() {
     function checkWidth() {
       isMobile = window.innerWidth < 768;
-      // On mobile, use overlay. On desktop, use Bootstrap modal.
     }
     checkWidth();
     window.addEventListener('resize', checkWidth);
@@ -638,19 +498,12 @@
     initResponsiveSwitch();
 
     renderScrollCatalog();
-
-    // Cleanup: unregister any leftover service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(function (regs) {
-        regs.forEach(function (r) { r.unregister(); });
-      });
-    }
   }
 
   document.addEventListener('DOMContentLoaded', init);
 
-  // Expose for other scripts
   window.openProductOverlay = openProductOverlay;
   window.closeProductOverlay = closeProductOverlay;
+  window.renderScrollCatalog = renderScrollCatalog;
 
 })();

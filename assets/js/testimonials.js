@@ -1,56 +1,17 @@
 (function () {
   'use strict';
 
-  var SUPABASE_URL = 'https://sziwmmxtwqacevyyngkr.supabase.co';
-  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6aXdtbXh0d3FhY2V2eXluZ2tyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0OTA2MjQsImV4cCI6MjA5ODA2NjYyNH0.G-9gRhDo7FHX3TpEfMOIQH9CGCUMVdMHCYgL3CvTU2w';
-  var STORAGE_BUCKET = 'testimonials';
-
-  function publicUrl(path) {
-    return SUPABASE_URL + '/storage/v1/object/public/' + STORAGE_BUCKET + '/' + path;
-  }
-
-  /* ---------------------------------------------------------------
-     FALLBACK
-     --------------------------------------------------------------- */
   var FALLBACK = [
-    { src: 'fotos/Colageno1.jpeg', alt: 'Experiencia real compartida por cliente de Colágeno Premium' },
-    { src: 'fotos/Omega1.jpeg', alt: 'Captura real de conversación sobre Omega 3,6,9' },
-    { src: 'fotos/Creatina1.jpeg', alt: 'Cliente comparte su experiencia auténtica con Creatina' },
-    { src: 'fotos/Detox Fix1.jpeg', alt: 'Conversación real de cliente satisfecho con Detox Fit' },
-    { src: 'fotos/BioEnergy1.jpeg', alt: 'Experiencia genuina de cliente con BioEnergy' },
-    { src: 'fotos/GanoGreen1.png', alt: 'Captura auténtica de cliente sobre GanoGreen' },
-    { src: 'fotos/Prostate1.jpeg', alt: 'Cliente real comparte su resultado con Prostate' },
-    { src: 'fotos/Floraints1.jpeg', alt: 'Experiencia auténtica con FloraInts' },
-    { src: 'fotos/CalcioZen1.jpeg', alt: 'Captura real de conversación sobre CalcioZen' },
-    { src: 'fotos/HepZen1.jpeg', alt: 'Cliente comparte su experiencia genuina con HepZen' },
-    { src: 'fotos/GanoGold1.jpeg', alt: 'Experiencia real compartida sobre GanoGold' },
+    { src: 'img/Tes1.jpg', alt: 'Experiencia real compartida por cliente de BIOZEN' },
+    { src: 'img/Tes2.jpg', alt: 'Captura real de conversación sobre productos BIOZEN' },
+    { src: 'img/Tes3.jpg', alt: 'Cliente comparte su experiencia auténtica con BIOZEN' },
+    { src: 'img/Tes4.jpg', alt: 'Conversación real de cliente satisfecho con BIOZEN' },
   ];
 
-  /* ---------------------------------------------------------------
-     FETCH FROM SUPABASE
-     --------------------------------------------------------------- */
   async function fetchTestimonials() {
-    try {
-      if (typeof window.supabase === 'undefined') return null;
-      var client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-      var res = await client
-        .from('testimonials')
-        .select('src, alt')
-        .eq('active', true)
-        .order('sort_order', { ascending: true, nullsFirst: false });
-      if (res.error) throw res.error;
-      if (!res.data || res.data.length === 0) return null;
-      return res.data.map(function (item) {
-        return { src: publicUrl(item.src), alt: item.alt };
-      });
-    } catch (_) {
-      return null;
-    }
+    return null;
   }
 
-  /* ---------------------------------------------------------------
-     CAROUSEL
-     --------------------------------------------------------------- */
   function Carousel(section, images) {
     this.images = images;
     this.section = section;
@@ -74,6 +35,7 @@
     this.cardW = 0;
     this.gap = 0;
     this.trackW = 0;
+    this.currentIndex = 0;
 
     this._raf = false;
     this._tween = null;
@@ -81,16 +43,24 @@
     this._imagesLoaded = 0;
     this._measurePending = false;
 
+    this.prevBtn = section.querySelector('.testimonials-btn-prev');
+    this.nextBtn = section.querySelector('.testimonials-btn-next');
+
     if (!this.viewport || !this.track) return;
     this.render();
     this.bind();
-    // Load visible images immediately so they start fetching
     this.lazyLoad();
-    // Measure after layout settles
-    requestAnimationFrame(this.measure.bind(this));
+    var self = this;
+    requestAnimationFrame(function () {
+      self.measure();
+      self.currentX = self.maxX;
+      gsap.set(self.track, { x: self.currentX });
+      self.updateIndex();
+      self.visuals();
+      self.lazyLoad();
+    });
   }
 
-  /* ----- RENDER ----- */
   Carousel.prototype.render = function () {
     var df = document.createDocumentFragment();
     var self = this;
@@ -104,12 +74,10 @@
       card.setAttribute('tabindex', '0');
       card.dataset.index = i;
 
-      // Skeleton loader — shown while image loads
       var skeleton = document.createElement('div');
       skeleton.className = 'testimonials-skeleton';
       card.appendChild(skeleton);
 
-      // Image element
       var picture = document.createElement('img');
       picture.dataset.src = img.src;
       picture.alt = '';
@@ -117,7 +85,6 @@
       picture.loading = 'lazy';
       picture.decoding = 'async';
 
-      // On load: fade skeleton out, mark image as loaded
       picture.addEventListener('load', function () {
         self._imagesLoaded++;
         var sk = this.parentNode.querySelector('.testimonials-skeleton');
@@ -126,7 +93,6 @@
         }
         this.classList.add('loaded');
 
-        // Re-measure after first image loads (dimensions may shift)
         if (self._imagesLoaded === 1 && !self._measurePending) {
           self._measurePending = true;
           requestAnimationFrame(function () {
@@ -137,7 +103,6 @@
         }
       });
 
-      // On error: replace skeleton with error icon
       picture.addEventListener('error', function () {
         var sk = this.parentNode.querySelector('.testimonials-skeleton');
         if (sk) {
@@ -154,7 +119,6 @@
     this.track.appendChild(df);
   };
 
-  /* ----- BIND ----- */
   Carousel.prototype.bind = function () {
     var self = this;
     this.viewport.addEventListener('pointerdown', function (e) { return self.down(e); });
@@ -163,44 +127,64 @@
     window.addEventListener('pointercancel', function (e) { return self.up(e); });
     this.viewport.addEventListener('contextmenu', function (e) { e.preventDefault(); });
     this.section.addEventListener('keydown', function (e) { return self.key(e); });
+    if (this.prevBtn) this.prevBtn.addEventListener('click', function (e) { e.stopPropagation(); self.nav(-1); });
+    if (this.nextBtn) this.nextBtn.addEventListener('click', function (e) { e.stopPropagation(); self.nav(1); });
+    this.viewport.addEventListener('wheel', function (e) { return self.wheel(e); }, { passive: false });
     window.addEventListener('resize', function () { return self.resize(); });
     window.addEventListener('orientationchange', function () {
       setTimeout(function () { self.resize(); }, 350);
     });
   };
 
-  /* ----- MEASURE ----- */
   Carousel.prototype.measure = function () {
     if (!this.cards.length) return;
     this.cardW = this.cards[0].offsetWidth;
     this.gap = parseFloat(window.getComputedStyle(this.track).gap) || 12;
     var vw = this.viewport.offsetWidth;
-    this.trackW = this.cards.length * (this.cardW + this.gap) - this.gap;
-    this.maxX = 0;
-    this.minX = Math.min(0, vw - this.trackW);
+    var step = this.cardW + this.gap;
+    this.trackW = this.cards.length * step - this.gap;
     if (this.trackW <= vw) {
       this.minX = this.maxX = (vw - this.trackW) / 2;
+    } else {
+      this.maxX = (vw - this.cardW) / 2;
+      this.minX = this.maxX - (this.cards.length - 1) * step;
     }
   };
 
-  /* ----- REFRESH (measure + reclamp + visuals) ----- */
   Carousel.prototype.refresh = function () {
     this.measure();
-    var x = gsap.getProperty(this.track, 'x');
-    if (typeof x !== 'number') x = 0;
-    this.currentX = Math.max(this.minX, Math.min(this.maxX, x));
+    if (this.track._gsap && typeof gsap.getProperty(this.track, 'x') === 'number') {
+      this.currentX = gsap.getProperty(this.track, 'x');
+    }
+    this.currentX = Math.max(this.minX, Math.min(this.maxX, this.currentX));
     gsap.set(this.track, { x: this.currentX });
+    this.updateIndex();
     this.visuals();
     this.lazyLoad();
   };
 
-  /* ----- LAZY LOAD ----- */
+  Carousel.prototype.updateIndex = function () {
+    if (!this.cards.length) return;
+    var vpC = this.viewport.offsetWidth / 2;
+    var step = this.cardW + this.gap;
+    var nearIdx = 0;
+    var nearDist = Infinity;
+    for (var i = 0; i < this.cards.length; i++) {
+      var c = i * step + this.cardW / 2;
+      var d = Math.abs(c + this.currentX - vpC);
+      if (d < nearDist) {
+        nearDist = d;
+        nearIdx = i;
+      }
+    }
+    this.currentIndex = nearIdx;
+  };
+
   Carousel.prototype.lazyLoad = function () {
     if (!this.cards.length) return;
     var vpW = this.viewport.offsetWidth;
     var buf = vpW;
     var tx = this.currentX || 0;
-    // Use measured cardW, or read from DOM if not yet measured
     var cw = this.cardW || this.cards[0].offsetWidth || vpW * 0.8;
     var gp = this.gap || parseFloat(window.getComputedStyle(this.track).gap) || 12;
 
@@ -218,14 +202,13 @@
     }
   };
 
-  /* ----- POINTER DOWN ----- */
   Carousel.prototype.down = function (e) {
     if (this.animating) {
       if (this._tween) { this._tween.kill(); this._tween = null; }
       this.animating = false;
     }
-    this.viewport.setPointerCapture(e.pointerId);
     this.dragging = true;
+    this._wasDrag = false;
     this.viewport.classList.add('dragging');
     this.startX = e.clientX;
     this.lastX = e.clientX;
@@ -235,16 +218,17 @@
     this.velocitySamples = [];
   };
 
-  /* ----- POINTER MOVE ----- */
   Carousel.prototype.move = function (e) {
     if (!this.dragging) return;
+    if (!this._wasDrag && Math.abs(e.clientX - this.startX) > 5) this._wasDrag = true;
     var now = performance.now();
     var dt = now - this.lastTime;
     if (dt > 0) {
       var dx = e.clientX - this.lastX;
       this.velocitySamples.push({ dx: dx, dt: dt });
       if (this.velocitySamples.length > 5) this.velocitySamples.shift();
-      var totalW = 0, totalV = 0;
+      var totalW = 0;
+      var totalV = 0;
       for (var i = 0; i < this.velocitySamples.length; i++) {
         var s = this.velocitySamples[i];
         var w = (i + 1) / this.velocitySamples.length;
@@ -270,38 +254,36 @@
     this.lazyLoad();
   };
 
-  /* ----- POINTER UP ----- */
   Carousel.prototype.up = function (e) {
     if (!this.dragging) return;
     this.dragging = false;
     this.viewport.classList.remove('dragging');
-    try { this.viewport.releasePointerCapture(e.pointerId); } catch (_) {}
     if (this._raf) { this._raf = false; this.visuals(); this.lazyLoad(); }
+    if (!this._wasDrag) {
+      var rect = this.viewport.getBoundingClientRect();
+      var clickX = e.clientX - rect.left;
+      this.nav(clickX > rect.width / 2 ? 1 : -1);
+      return;
+    }
     if (this.currentX > this.maxX || this.currentX < this.minX) {
       this.animTo(Math.max(this.minX, Math.min(this.maxX, this.currentX)), 0.5);
       return;
     }
     var absV = Math.abs(this.velocity);
     if (absV > 0.003) {
-      var momentum = this.velocity * 360;
-      var target = this.currentX + momentum;
-      target = Math.max(this.minX, Math.min(this.maxX, target));
-      var dist = Math.abs(target - this.currentX);
-      var dur = Math.min(dist / 500, 1.2);
-      this.animTo(target, Math.max(dur, 0.25));
+      var dir = this.velocity > 0 ? -1 : 1;
+      this.nav(dir);
     } else {
       this.snap();
     }
   };
 
-  /* ----- RUBBER BAND ----- */
   Carousel.prototype.rubber = function (x) {
     if (x > this.maxX) { var o = x - this.maxX; return this.maxX + Math.log(1 + o) * 35; }
     if (x < this.minX) { var o2 = this.minX - x; return this.minX - Math.log(1 + o2) * 35; }
     return x;
   };
 
-  /* ----- ANIMATE TO ----- */
   Carousel.prototype.animTo = function (x, dur) {
     var self = this;
     this.animating = true;
@@ -320,51 +302,61 @@
         self.animating = false;
         self._tween = null;
         self.currentX = gsap.getProperty(self.track, 'x');
+        self.updateIndex();
         self.visuals();
-        if (Math.abs(self.velocity) < 0.005) self.snap();
       }
     });
   };
 
-  /* ----- SNAP ----- */
+  Carousel.prototype.nav = function (dir) {
+    var len = this.cards.length;
+    if (len === 0) return;
+    if (this.animating) {
+      if (this._tween) { this._tween.kill(); this._tween = null; }
+      this.animating = false;
+    }
+    this.measure();
+    this.currentIndex = (this.currentIndex + dir + len) % len;
+    var vpW = this.viewport.offsetWidth;
+    var target = -(this.currentIndex * (this.cardW + this.gap)) + (vpW - this.cardW) / 2;
+    target = Math.max(this.minX, Math.min(this.maxX, target));
+    this.animTo(target, 0.35);
+  };
+
   Carousel.prototype.snap = function () {
     if (!this.cards.length) return;
     this.measure();
+    this.updateIndex();
     var vpW = this.viewport.offsetWidth;
-    var vpC = vpW / 2;
-    var nearIdx = 0, nearDist = Infinity;
-    for (var i = 0; i < this.cards.length; i++) {
-      var c = i * (this.cardW + this.gap) + this.cardW / 2;
-      var d = Math.abs(c + this.currentX - vpC);
-      if (d < nearDist) { nearDist = d; nearIdx = i; }
-    }
-    var target = -(nearIdx * (this.cardW + this.gap)) + (vpW - this.cardW) / 2;
+    var target = -(this.currentIndex * (this.cardW + this.gap)) + (vpW - this.cardW) / 2;
     target = Math.max(this.minX, Math.min(this.maxX, target));
     if (Math.abs(target - this.currentX) < 2) return;
     this.animTo(target, 0.35);
   };
 
-  /* ----- VISUALS (scale, opacity, rotation, depth) ----- */
   Carousel.prototype.visuals = function () {
     if (!this.cards.length) return;
     var vpW = this.viewport.offsetWidth;
     var vpC = vpW / 2;
     var tx = this.currentX;
     var maxD = vpW * 0.55;
+    var step = this.cardW + this.gap;
     for (var i = 0; i < this.cards.length; i++) {
       var card = this.cards[i];
-      var cC = i * (this.cardW + this.gap) + this.cardW / 2;
+      var cC = i * step + this.cardW / 2;
       var dist = Math.abs(cC + tx - vpC);
       var n = Math.min(dist / maxD, 1);
       var scale = 1 - n * 0.14;
       var opacity = 1 - n * 0.5;
       var dir = (cC + tx - vpC) / (vpW * 0.5);
       var rotY = -dir * 2.5 * (1 - Math.min(dist / (vpW * 0.3), 1));
-      var sO = card._bs, oO = card._bo, rO = card._br;
+      var sO = card._bs;
+      var oO = card._bo;
+      var rO = card._br;
       if (sO !== undefined &&
           Math.abs(scale - sO) < 0.005 &&
           Math.abs(opacity - oO) < 0.005 &&
-          (rO !== undefined && Math.abs(rotY - rO) < 0.05)) {
+          rO !== undefined && Math.abs(rotY - rO) < 0.05) {
         card.classList.toggle('active', n < 0.15);
         continue;
       }
@@ -376,19 +368,22 @@
     }
   };
 
-  /* ----- KEYBOARD ----- */
   Carousel.prototype.key = function (e) {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
     e.preventDefault();
-    this.measure();
-    var dir = e.key === 'ArrowRight' ? -1 : 1;
-    var step = this.cardW + this.gap;
-    var target = Math.max(this.minX, Math.min(this.maxX, this.currentX + dir * step));
-    if (this._tween) { this._tween.kill(); this._tween = null; }
-    this.animTo(target, 0.35);
+    this.nav(e.key === 'ArrowRight' ? 1 : -1);
   };
 
-  /* ----- RESIZE / ORIENTATION ----- */
+  Carousel.prototype.wheel = function (e) {
+    e.preventDefault();
+    var deltaX = Math.abs(e.deltaX);
+    var deltaY = Math.abs(e.deltaY);
+    var delta = deltaX > deltaY ? e.deltaX : e.deltaY;
+    if (Math.abs(delta) > 20) {
+      this.nav(delta > 0 ? 1 : -1);
+    }
+  };
+
   Carousel.prototype.resize = function () {
     var self = this;
     clearTimeout(this._rtimer);
@@ -397,14 +392,12 @@
       var c = Math.max(self.minX, Math.min(self.maxX, self.currentX));
       self.currentX = c;
       gsap.set(self.track, { x: c });
+      self.updateIndex();
       self.visuals();
       self.lazyLoad();
     }, 120);
   };
 
-  /* ---------------------------------------------------------------
-     BOOT
-     --------------------------------------------------------------- */
   async function boot() {
     var el = document.getElementById('testimonios');
     if (!el) return;

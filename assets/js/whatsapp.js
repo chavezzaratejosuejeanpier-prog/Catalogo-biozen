@@ -2,12 +2,13 @@
   'use strict';
 
   var WHATSAPP_NUMBER = '51972507949';
+  var WHATSAPP_DISPLAY = '+51 972 507 949';
 
   var products = window.products || [];
 
   function getProductWhatsAppMessage(productName) {
     var name = productName || 'sus productos';
-    return 'Hola BIOZEN, me interesa ' + name + '. Quisiera m\u00E1s informaci\u00F3n.';
+    return 'Hola! Me interesa ' + name + ' de BIOZEN. ¿Podrían darme más información?';
   }
 
   function openWhatsApp(productName, source) {
@@ -35,7 +36,7 @@
   }
 
   function openWhatsAppGeneric(source) {
-    var msg = 'Hola BIOZEN, quiero informaci\u00F3n sobre sus productos.';
+    var msg = '¡Hola! Quiero información sobre los productos de BIOZEN.';
     var src = source || 'generic';
     window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(msg), '_blank');
     trackClick('General', src);
@@ -43,12 +44,8 @@
 
   function trackClick(productName, source) {
     var event = new CustomEvent('biozen:whatsappClick', {
-      detail: {
-        product: productName,
-        source: source
-      },
-      bubbles: true,
-      cancelable: true
+      detail: { product: productName, source: source },
+      bubbles: true, cancelable: true
     });
     document.dispatchEvent(event);
   }
@@ -57,7 +54,6 @@
     document.addEventListener('click', function (e) {
       var target = e.target.closest('[data-whatsapp-product]');
       if (!target) return;
-
       var productName = target.getAttribute('data-whatsapp-product');
       var source = target.getAttribute('data-whatsapp-source') || 'data-attribute';
       e.preventDefault();
@@ -67,7 +63,6 @@
     document.addEventListener('click', function (e) {
       var target = e.target.closest('[data-whatsapp-product-id]');
       if (!target) return;
-
       var productId = parseInt(target.getAttribute('data-whatsapp-product-id'));
       var source = target.getAttribute('data-whatsapp-source') || 'data-attribute';
       if (isNaN(productId)) return;
@@ -81,6 +76,7 @@
   }
 
   window.WHATSAPP_NUMBER = WHATSAPP_NUMBER;
+  window.WHATSAPP_DISPLAY = WHATSAPP_DISPLAY;
   window.openWhatsApp = openWhatsApp;
   window.openWhatsAppGeneric = openWhatsAppGeneric;
   window.openWhatsAppProduct = openWhatsAppProduct;

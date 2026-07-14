@@ -18,9 +18,9 @@
 
   <!-- Manifest & PWA -->
   <link rel="manifest" href="/manifest.json">
-  <link rel="apple-touch-icon" href="/assets/img/icon-192.png">
-  <link rel="apple-touch-icon" sizes="192x192" href="/assets/img/icon-192.png">
-  <link rel="apple-touch-icon" sizes="512x512" href="/assets/img/icon-512.png">
+  <link rel="apple-touch-icon" href="/assets/img/icon-192.webp">
+  <link rel="apple-touch-icon" sizes="192x192" href="/assets/img/icon-192.webp">
+  <link rel="apple-touch-icon" sizes="512x512" href="/assets/img/icon-512.webp">
 
   <!-- Canonical -->
   <link rel="canonical" href="https://biozen.pe">
@@ -32,25 +32,28 @@
   <meta property="og:url" content="https://biozen.pe">
   <meta property="og:site_name" content="BIOZEN">
   <meta property="og:locale" content="es_PE">
-  <meta property="og:image" content="https://biozen.pe/assets/img/og-image.jpg">
+  <meta property="og:image" content="https://biozen.pe/assets/img/og-image.webp">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="800">
+  <meta property="og:image:alt" content="BIOZEN — Fórmulas Naturales para tu Bienestar">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="BIOZEN — Fórmulas Naturales para tu Bienestar">
-  <meta name="twitter:description" content="Descubre BIOZEN, fórmulas naturales peruanas para tu bienestar.">
+  <meta name="twitter:image" content="https://biozen.pe/assets/img/og-image.webp">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230d9488'/%3E%3Cpath d='M35 55 L45 65 L65 40' stroke='white' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/webp" sizes="192x192" href="/assets/img/icon-192.webp">
+  <link rel="icon" type="image/webp" sizes="512x512" href="/assets/img/icon-512.webp">
 
-  <!-- Schema.org: Organization -->
+  <!-- Schema.org: Distributor -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "BIOZEN",
+    "@type": "Store",
+    "name": "Distribuidora Autorizada BIOZEN",
     "url": "https://biozen.pe",
-    "logo": "https://biozen.pe/assets/img/logo.png",
-    "description": "Fórmulas naturales peruanas para tu bienestar",
+    "description": "Distribuidores autorizados de BIOZEN en Perú. Fórmulas naturales peruanas con registro sanitario.",
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+51-972507949",
@@ -65,13 +68,13 @@
   }
   </script>
 
-  <!-- Schema.org: Product (placeholder for dynamic) -->
+  <!-- Schema.org: Product -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": "BIOZEN Suplementos Naturales",
-    "description": "Fórmulas naturales peruanas cuidadosamente seleccionadas.",
+    "description": "Fórmulas naturales peruanas originales con registro sanitario, distribuidas por un punto de venta autorizado.",
     "brand": {
       "@type": "Brand",
       "name": "BIOZEN"
@@ -79,7 +82,11 @@
     "offers": {
       "@type": "AggregateOffer",
       "priceCurrency": "PEN",
-      "availability": "https://schema.org/InStock"
+      "availability": "https://schema.org/InStock",
+      "seller": {
+        "@type": "Store",
+        "name": "Distribuidora Autorizada BIOZEN"
+      }
     }
   }
   </script>
@@ -154,7 +161,7 @@
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -169,67 +176,9 @@
   <link href="assets/css/testimonials.css" rel="stylesheet">
 
   <style>
-    .trust-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-    }
-    @media (max-width: 768px) {
-      .trust-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-      }
-    }
-    @media (max-width: 425px) {
-      .trust-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.75rem;
-      }
-    }
-    .hero-visual {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      min-height: 380px;
-      display: flex;
+    .hero-badge {
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
-    }
-    .hero-visual-circle {
-      position: absolute;
-      border-radius: 50%;
-    }
-    .hero-visual-circle-1 {
-      width: 280px;
-      height: 280px;
-      background: radial-gradient(circle, rgba(13,148,136,0.12), transparent 70%);
-      animation: floatSlow 5s ease-in-out infinite;
-    }
-    .hero-visual-circle-2 {
-      width: 200px;
-      height: 200px;
-      background: radial-gradient(circle, rgba(132,204,22,0.08), transparent 70%);
-      animation: floatSlow 6s ease-in-out infinite;
-      animation-delay: -2s;
-      top: 10%;
-      right: 10%;
-    }
-    .hero-visual-circle-3 {
-      width: 160px;
-      height: 160px;
-      background: radial-gradient(circle, rgba(13,148,136,0.1), transparent 70%);
-      animation: floatSlow 7s ease-in-out infinite;
-      animation-delay: -4s;
-      bottom: 15%;
-      left: 5%;
-    }
-    .hero-visual-icon {
-      position: relative;
-      z-index: 2;
-      font-size: 5rem;
-      color: var(--primary);
-      opacity: 0.6;
-      animation: float 3s ease-in-out infinite;
     }
   </style>
 </head>
@@ -257,13 +206,12 @@
           <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
           <li class="nav-item"><a class="nav-link" href="#productos">Productos</a></li>
           <li class="nav-item"><a class="nav-link" href="#confianza">Beneficios</a></li>
+          <li class="nav-item"><a class="nav-link" href="#nosotros">Sobre Nosotros</a></li>
           <li class="nav-item"><a class="nav-link" href="#testimonios">Testimonios</a></li>
           <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
           <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
         </ul>
-        <a class="btn btn-whatsapp-sm" href="javascript:void(0)" onclick="openWhatsAppGeneric()" data-gsap="magnetic">
-          <i class="bi bi-whatsapp"></i> Escríbenos
-        </a>
+        
       </div>
     </div>
   </nav>
@@ -273,8 +221,10 @@
     <div class="container">
       <div class="row align-items-center g-5">
         <div class="col-lg-6">
-          <div class="hero-badge reveal reveal-fadeIn" data-gsap="fadeIn" data-delay="0.2">
-            <i class="bi bi-flower1"></i> 100% Natural
+          <div class="hero-badge reveal reveal-fadeIn" data-gsap="fadeIn" data-delay="0.2" style="gap: 12px;">
+            <span><i class="bi bi-flower1"></i> 100% Natural</span>
+            <span class="badge-divider"></span>
+            <span><i class="bi bi-patch-check"></i> Distribuidor Oficial</span>
           </div>
           <h1 class="hero-title reveal reveal-slideUp stagger-1" data-gsap="slideUp" data-delay="0.3">
             No es magia.<br>Es <span class="highlight gradient-text">ciencia natural</span> para tu cuerpo.
@@ -286,9 +236,6 @@
             <a href="#productos" class="btn btn-custom btn-primary-custom btn-magnetic">
               Ver Fórmulas <i class="bi bi-arrow-right"></i>
             </a>
-            <a href="javascript:void(0)" onclick="openWhatsAppGeneric()" class="btn btn-custom btn-whatsapp btn-magnetic">
-              <i class="bi bi-whatsapp"></i> Hablar con un Especialista
-            </a>
           </div>
           <p class="hero-footnote">
             <i class="bi bi-shield-check"></i> Fórmulas con registro sanitario
@@ -297,12 +244,7 @@
         <div class="col-lg-6">
           <div class="hero-image-wrapper reveal reveal-zoomIn stagger-2" data-gsap="zoomIn" data-delay="0.4">
             <div class="hero-visual">
-              <div class="hero-visual-circle hero-visual-circle-1"></div>
-              <div class="hero-visual-circle hero-visual-circle-2" style="position:absolute;"></div>
-              <div class="hero-visual-circle hero-visual-circle-3" style="position:absolute;"></div>
-              <div class="hero-visual-icon">
-                <i class="bi bi-flower2"></i>
-              </div>
+              <img src="assets/img/IMAGEN%20OFICIAL.jpeg" alt="BIOZEN — Fórmulas Naturales" class="hero-product-img" loading="eager">
             </div>
           </div>
         </div>
@@ -352,6 +294,47 @@
     </div>
   </section>
 
+  <!-- ===== SOBRE NOSOTROS ===== -->
+  <section class="about-section section-padding" id="nosotros">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-5">
+          <div class="about-image-wrapper reveal reveal-slideLeft stagger-1">
+            <img src="img/Yaritza.webp" alt="Yaritza - Distribuidora Autorizada BIOZEN" class="about-photo" loading="lazy">
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="about-badge reveal reveal-fadeIn" data-delay="0.2">
+            <i class="bi bi-shield-check"></i> ¿Quién soy?
+          </div>
+          <h2 class="about-title reveal reveal-slideUp stagger-1">
+            Distribuidora Autorizada de <span class="gradient-text">BIOZEN</span> en Perú
+          </h2>
+          <p class="about-text reveal reveal-slideUp stagger-2">
+            Soy Yaritza, distribuidora autorizada de BIOZEN. Mi compromiso es acercarte fórmulas naturales de la más alta calidad. Trabajo directamente con la marca para garantizar que cada producto que recibes sea <strong>100% original</strong> y cuente con registro sanitario vigente.
+          </p>
+          <p class="about-text reveal reveal-slideUp stagger-3">
+            Mi misión es brindarte asesoría <strong>personalizada y gratuita</strong> para que encuentres la fórmula ideal para ti o tu familia. Cada consulta es atendida por mí directamente, conociendo los productos y preocupándome por tu bienestar.
+          </p>
+          <div class="about-features reveal reveal-slideUp stagger-4">
+            <div class="about-feature">
+              <i class="bi bi-check-circle-fill"></i>
+              <span>Productos originales con registro sanitario</span>
+            </div>
+            <div class="about-feature">
+              <i class="bi bi-check-circle-fill"></i>
+              <span>Asesoría gratuita y personalizada</span>
+            </div>
+            <div class="about-feature">
+              <i class="bi bi-check-circle-fill"></i>
+              <span>Envíos rápidos a todo el Perú</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== PRODUCTS SECTION ===== -->
   <section class="products-section section-padding" id="productos">
     <div class="container">
@@ -361,12 +344,41 @@
       </div>
 
       <!-- Products Grid (Desktop) -->
-      <div id="productsGrid" class="row g-4 d-none d-md-flex"></div>
+      <div id="productsGrid" class="row g-4 d-none d-md-flex">
+        <div class="products-grid-skeleton" id="productsSkeleton">
+          <div class="skeleton-card"><div class="skeleton-card-img"></div><div class="skeleton-card-body"><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
+          <div class="skeleton-card"><div class="skeleton-card-img"></div><div class="skeleton-card-body"><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
+          <div class="skeleton-card"><div class="skeleton-card-img"></div><div class="skeleton-card-body"><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
+          <div class="skeleton-card"><div class="skeleton-card-img"></div><div class="skeleton-card-body"><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div>
+        </div>
+      </div>
 
       <!-- Products Scroll (Mobile) -->
       <div class="d-md-none">
         <div id="scrollProducts" class="products-scroll"></div>
       </div>
+
+      <script>
+        window.openWhatsApp = window.openWhatsApp || function (productName) {
+          var msg = productName ? 'Hola! Me interesa ' + productName + ' de BIOZEN. ¿Podrían darme más información?' : '¡Hola! Quiero información sobre los productos de BIOZEN.';
+          window.open('https://wa.me/51972507949?text=' + encodeURIComponent(msg), '_blank');
+        };
+        (function () {
+          var fallback = [{"id":1,"title":"Prostate","img":"fotos/Prostate1.webp"},{"id":2,"title":"Colágeno Premiun","img":"fotos/Colageno1.webp"},{"id":3,"title":"Omega 3,6,9","img":"fotos/Omega1.webp"},{"id":4,"title":"Creatina","img":"fotos/Creatina1.webp"},{"id":5,"title":"Detox Fit","img":"fotos/Detox Fit1.webp"},{"id":6,"title":"BioEnergy","img":"fotos/BioEnergy1.webp"},{"id":7,"title":"GanoGreen","img":"fotos/GanoGreen1.webp"},{"id":8,"title":"FloraInts","img":"fotos/Floraints1.webp"},{"id":9,"title":"CalcioZen","img":"fotos/CalcioZen1.webp"},{"id":10,"title":"HepZen","img":"fotos/HepZen1.webp"},{"id":11,"title":"GanoGold","img":"fotos/GanoGold1.webp"}];
+          var grid = document.getElementById('productsGrid');
+          if (grid) {
+            grid.innerHTML = fallback.map(function (p) {
+              return '<div class="col-lg-3 col-md-4 col-sm-6"><div class="product-card" data-product-id="' + p.id + '"><div class="product-card-img"><img src="' + p.img + '" alt="' + p.title + ' - BIOZEN" width="400" height="400" class="active"></div><div class="product-card-body"><h3 class="product-card-title">' + p.title + '</h3><div class="product-card-actions"><button class="btn btn-whatsapp-sm" onclick="event.stopPropagation(); openWhatsApp(\'' + p.title + '\')"><i class="bi bi-whatsapp"></i> Consultar</button></div></div></div></div>';
+            }).join('');
+          }
+          var scroll = document.getElementById('scrollProducts');
+          if (scroll) {
+            scroll.innerHTML = fallback.map(function (p) {
+              return '<div class="product-scroll-card" data-product-id="' + p.id + '"><div class="scroll-card-img"><img src="' + p.img + '" alt="' + p.title + '" width="300" height="300"></div><div class="scroll-card-body"><h3 class="scroll-card-title">' + p.title + '</h3></div></div>';
+            }).join('');
+          }
+        })();
+      </script>
     </div>
   </section>
 
@@ -396,6 +408,7 @@
 
           <!-- Right Column: Product Info -->
           <div class="product-info-section">
+            <div class="modal-category-badge" id="modalCategoryBadge"></div>
             <h2 class="modal-product-title" id="modalProductTitle">Producto</h2>
 
             <!-- Premium Accordion -->
@@ -435,7 +448,8 @@
             <!-- WhatsApp CTA inside right column -->
             <button class="btn btn-whatsapp-premium" id="modalWhatsappBtn">
               <i class="bi bi-whatsapp"></i>
-              <span class="cta-text">Consultar por WhatsApp</span>
+              <span class="cta-text">Consultar por <strong>WhatsApp</strong></span>
+              <span class="cta-subtext">Respuesta rápida</span>
               <span class="cta-arrow"><i class="bi bi-arrow-right"></i></span>
             </button>
           </div>
@@ -458,6 +472,12 @@
             <!-- Cards rendered by testimonials.js -->
           </div>
         </div>
+        <button class="testimonials-btn testimonials-btn-prev" aria-label="Anterior">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="testimonials-btn testimonials-btn-next" aria-label="Siguiente">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
         <div class="text-center mt-3 mt-md-4">
           <small class="text-muted" style="font-size:0.8rem;opacity:0.6;">Desliza para ver más experiencias</small>
         </div>
@@ -478,48 +498,48 @@
             <div class="accordion-item">
               <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true">
-                  ¿Cómo puedo realizar una consulta?
+                  ¿Los productos BIOZEN tienen registro sanitario?
                 </button>
               </h2>
               <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
                 <div class="accordion-body">
-                  Puedes consultarnos directamente a través de nuestro WhatsApp al <strong>+51 972 507 949</strong>. Estaremos encantados de resolver todas tus dudas sobre nuestros productos.
+                  Sí, todos nuestros productos cuentan con registro sanitario vigente y están elaborados bajo estrictos estándares de calidad. Puedes usarlos con total confianza.
                 </div>
               </div>
             </div>
             <div class="accordion-item">
               <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-                  ¿Cómo recibir asesoría personalizada?
+                  ¿Cómo sé qué producto es el ideal para mí?
                 </button>
               </h2>
               <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                 <div class="accordion-body">
-                  Escríbenos por WhatsApp y uno de nuestros especialistas te atenderá de forma gratuita. Te recomendaremos la fórmula ideal según tus necesidades y objetivos.
+                  Cada fórmula está diseñada para un objetivo específico: energía, articulaciones, digestión, defensas, entre otros. Revisa la sección de productos donde encontrarás la descripción detallada de cada uno y sus beneficios.
                 </div>
               </div>
             </div>
             <div class="accordion-item">
               <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-                  ¿Cómo adquirir un producto?
+                  ¿Hacen envíos a todo el Perú?
                 </button>
               </h2>
               <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                 <div class="accordion-body">
-                  Solo debes contactarnos por WhatsApp, indicarnos el producto de tu interés y coordinamos la entrega. Realizamos envíos a todo el Perú.
+                  Sí, realizamos envíos a todo el Perú con entregas rápidas y seguras. El tiempo de entrega depende de tu ubicación, pero generalmente es de 1 a 3 días hábiles en Lima y de 3 a 7 días para provincias.
                 </div>
               </div>
             </div>
             <div class="accordion-item">
               <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
-                  ¿Qué medios de contacto están disponibles?
+                  ¿Cuál es el modo de uso de los productos?
                 </button>
               </h2>
               <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                 <div class="accordion-body">
-                  Puedes contactarnos por WhatsApp al <strong>+51 972 507 949</strong>, por correo a <strong>hola@biozen.pe</strong> o a través de nuestras redes sociales.
+                  Cada producto incluye sus instrucciones específicas. En general, los formatos en polvo se disuelven en agua y las cápsulas se toman con abundante líquido. Te recomendamos seguir la dosis indicada en la etiqueta de cada producto.
                 </div>
               </div>
             </div>
@@ -546,16 +566,9 @@
         </div>
         <div class="col-md-6 col-lg-3">
           <div class="contact-card reveal reveal-slideUp stagger-2">
-            <div class="contact-icon"><i class="bi bi-envelope"></i></div>
-            <h3 class="contact-card-title">Email</h3>
-            <p class="contact-card-text"><a href="mailto:hola@biozen.pe">hola@biozen.pe</a></p>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="contact-card reveal reveal-slideUp stagger-3">
             <div class="contact-icon"><i class="bi bi-clock"></i></div>
             <h3 class="contact-card-title">Horario</h3>
-            <p class="contact-card-text">Lun – Sáb: 9:00 am – 8:00 pm</p>
+            <p class="contact-card-text">Lun – Sáb: 7:00 am – 10:00 pm</p>
           </div>
         </div>
         <div class="col-md-6 col-lg-3">
@@ -583,6 +596,10 @@
       <i class="bi bi-shield-check"></i>
       <span>Beneficios</span>
     </a>
+    <a class="nav-item" data-target="#nosotros" href="#nosotros" aria-label="Nosotros">
+      <i class="bi bi-shop"></i>
+      <span>Nosotros</span>
+    </a>
     <a class="nav-item" data-target="#testimonios" href="#testimonios" aria-label="Testimonios">
       <i class="bi bi-chat-square-quote"></i>
       <span>Testimonios</span>
@@ -598,8 +615,8 @@
     <div class="container">
       <div class="row g-4">
         <div class="col-lg-4">
-          <div class="footer-brand"><i class="bi bi-flower2"></i> BIOZEN</div>
-          <p class="footer-text">Fórmulas naturales peruanas para recuperar tu energía, bienestar y equilibrio. Calidad y confianza que transforman tu salud.</p>
+          <div class="footer-brand"><i class="bi bi-flower2"></i> Distribuidora BIOZEN</div>
+          <p class="footer-text">Distribuidores autorizados de BIOZEN en Perú. Fórmulas naturales originales con registro sanitario, asesoría personalizada y envíos a todo el país.</p>
           <div class="footer-social d-flex gap-2 mt-3">
             <a href="https://www.facebook.com/biozenperu" target="_blank" rel="noopener" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
             <a href="https://www.instagram.com/biozenperu" target="_blank" rel="noopener" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
@@ -613,6 +630,7 @@
             <li><a href="#inicio">Inicio</a></li>
             <li><a href="#productos">Productos</a></li>
             <li><a href="#confianza">Beneficios</a></li>
+            <li><a href="#nosotros">Sobre Nosotros</a></li>
             <li><a href="#testimonios">Testimonios</a></li>
             <li><a href="#faq">FAQ</a></li>
           </ul>
@@ -638,7 +656,8 @@
       </div>
       <hr class="footer-divider">
       <div class="footer-bottom">
-        <p class="mb-0">&copy; 2026 BIOZEN Perú · Todos los derechos reservados.</p>
+        <p class="mb-0">&copy; 2026 Distribuidora Autorizada BIOZEN · Todos los derechos reservados.</p>
+        <p class="footer-disclaimer">BIOZEN&reg; es una marca registrada. Este sitio web es operado por un distribuidor autorizado independiente. Los precios y promociones pueden variar.</p>
       </div>
     </div>
   </footer>
@@ -646,10 +665,10 @@
   <!-- ===== FULLSCREEN PRODUCT OVERLAY (Mobile) ===== -->
   <div class="product-overlay" id="productOverlay">
     <div class="overlay-header">
-      <div>
-        <div class="overlay-category"></div>
-        <h3 class="overlay-title"></h3>
-      </div>
+        <div>
+          <div class="overlay-category"></div>
+          <h3 class="overlay-title"></h3>
+        </div>
       <button class="overlay-close" aria-label="Cerrar">
         <i class="bi bi-x-lg"></i>
       </button>
@@ -689,8 +708,9 @@
     </div>
 
     <div class="overlay-footer">
-      <button class="btn btn-whatsapp-sm overlay-whatsapp-btn">
-        <i class="bi bi-whatsapp"></i> Consultar por WhatsApp
+      <button class="btn overlay-whatsapp-btn">
+        <i class="bi bi-whatsapp"></i>
+        <span>Consultar por <strong>WhatsApp</strong></span>
       </button>
     </div>
   </div>
@@ -698,7 +718,7 @@
   <!-- ===== WHATSAPP FLOAT BUTTON ===== -->
   <a href="https://wa.me/51972507949" target="_blank" rel="noopener" class="whatsapp-float" id="whatsappFloat" aria-label="Contactar por WhatsApp">
     <i class="bi bi-whatsapp"></i>
-    <span class="whatsapp-tooltip">¿Necesitas ayuda?</span>
+    <span class="whatsapp-tooltip"><strong>¿Necesitas ayuda?</strong><br><small>+51 972 507 949</small></span>
   </a>
 
   <!-- ===== BACK TO TOP ===== -->
@@ -707,57 +727,19 @@
   </a>
 
   <!-- ===== JAVASCRIPT ===== -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
   <script defer src="assets/js/whatsapp.js"></script>
   <script defer src="assets/js/products.js"></script>
-  <script defer src="assets/js/zoom.js"></script>
   <script defer src="assets/js/modal.js"></script>
   <script defer src="assets/js/gsap-effects.js"></script>
-  <script defer src="assets/js/scrolltrigger.js"></script>
   <script defer src="assets/js/analytics.js"></script>
   <script defer src="assets/js/main.js"></script>
   <script defer src="assets/js/app.js"></script>
   <script defer src="assets/js/testimonials.js"></script>
-
-  <!-- ===== ANALYTICS SCRIPTS (uncomment and configure) ===== -->
-  <!--
-  Google Analytics 4 (GA4):
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX');
-  </script>
-
-  Meta Pixel:
-  <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', 'YOUR_PIXEL_ID');
-    fbq('track', 'PageView');
-  </script>
-
-  Microsoft Clarity:
-  <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "YOUR_CLARITY_ID");
-  </script>
-  -->
-
-
+  <script defer src="assets/js/sw-register.js"></script>
 
 </body>
 </html>

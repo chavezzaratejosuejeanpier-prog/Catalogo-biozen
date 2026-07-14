@@ -293,6 +293,42 @@
     }, { passive: true });
   }
 
+  function initParallaxSections() {
+    var sections = document.querySelectorAll('.parallax-section');
+    if (!sections.length) return;
+    sections.forEach(function (section) {
+      var bg = section.querySelector('[data-parallax-bg]') || section;
+      var speed = parseFloat(section.getAttribute('data-speed')) || 0.3;
+      gsap.to(bg, {
+        y: function () { return section.offsetHeight * speed * 0.5; },
+        ease: 'none',
+        scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true, invalidateOnRefresh: true }
+      });
+    });
+  }
+
+  function initStaggerChildren() {
+    var containers = document.querySelectorAll('.stagger-children');
+    if (!containers.length) return;
+    containers.forEach(function (container) {
+      var children = container.children;
+      if (!children.length) return;
+      gsap.from(children, {
+        opacity: 0, y: 40, duration: 0.6, ease: 'power2.out', stagger: 0.1,
+        scrollTrigger: { trigger: container, start: 'top 82%', toggleActions: 'play none none none', once: true }
+      });
+    });
+  }
+
+  function initTestimonialCards() {
+    var cards = document.querySelectorAll('.testimonial-card');
+    if (!cards.length) return;
+    gsap.from(cards, {
+      opacity: 0, y: 40, scale: 0.95, duration: 0.6, ease: 'power2.out', stagger: 0.1,
+      scrollTrigger: { trigger: '.testimonials-section', start: 'top 78%', toggleActions: 'play none none none', once: true }
+    });
+  }
+
   function init() {
     if (typeof gsap === 'undefined') return;
     gsap.registerPlugin(ScrollTrigger);
@@ -310,14 +346,11 @@
     initPageTransitions();
     initMobileCardReveal();
     initNavbarAnimation();
+    initParallaxSections();
+    initStaggerChildren();
+    initTestimonialCards();
 
     ScrollTrigger.refresh();
-
-    // Re-check on resize
-    window.addEventListener('resize', function () {
-      isMobile = window.innerWidth < 768;
-      ScrollTrigger.refresh();
-    });
   }
 
   document.addEventListener('DOMContentLoaded', init);

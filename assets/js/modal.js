@@ -13,9 +13,10 @@ function openProductModal(productId) {
 
   galleryProduct = product;
   galleryCurrentIndex = 0;
-  resetZoom();
 
   document.getElementById('modalProductTitle').textContent = product.title;
+  var catBadge = document.getElementById('modalCategoryBadge');
+  if (catBadge) catBadge.textContent = product.cat || '';
 
   updateGalleryView();
 
@@ -31,8 +32,6 @@ function openProductModal(productId) {
   if (whatsappBtn) {
     whatsappBtn.onclick = () => openWhatsApp(product.title);
   }
-
-  resetZoom();
 
   const modalEl = document.getElementById('productModal');
   if (!modalEl) return;
@@ -53,10 +52,23 @@ function openProductModal(productId) {
 function updateGalleryView() {
   if (!galleryProduct) return;
 
+  const container = document.getElementById('modalGalleryImgContainer');
+  if (container) container.classList.remove('loaded');
   const img = document.getElementById('modalGalleryImg');
   if (img) {
-    img.src = galleryProduct.media[galleryCurrentIndex].src;
-    img.alt = `${galleryProduct.title} - Imagen ${galleryCurrentIndex + 1}`;
+    img.style.opacity = '0';
+    setTimeout(function () {
+      img.src = galleryProduct.media[galleryCurrentIndex].src;
+      img.alt = `${galleryProduct.title} - Imagen ${galleryCurrentIndex + 1}`;
+      img.onload = function () {
+        if (container) container.classList.add('loaded');
+        img.style.opacity = '1';
+      };
+      if (img.complete) {
+        if (container) container.classList.add('loaded');
+        img.style.opacity = '1';
+      }
+    }, 60);
   }
 
   // Update image counter
@@ -91,9 +103,6 @@ function updateGalleryView() {
   const nextBtn = document.getElementById('modalGalleryNext');
   if (prevBtn) prevBtn.style.display = galleryProduct.media.length <= 1 ? 'none' : '';
   if (nextBtn) nextBtn.style.display = galleryProduct.media.length <= 1 ? 'none' : '';
-
-  resetZoom();
-  initZoomControls();
 }
 
 function galleryNext() {
@@ -126,6 +135,55 @@ function resetGalleryAutoSlide() {
   startGalleryAutoSlide();
 }
 
+var _modalSwipeInitialized = false;
+
+function initModalGallerySwipe() {
+  if (_modalSwipeInitialized) return;
+  var container = document.getElementById('modalGalleryImgContainer');
+  if (!container) return;
+
+  var startX = 0;
+  var currentX = 0;
+  var isSwiping = false;
+
+  container.addEventListener('pointerdown', function (e) {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    if (!galleryProduct || galleryProduct.media.length <= 1) return;
+    startX = e.clientX;
+    currentX = startX;
+    isSwiping = false;
+    container.setPointerCapture(e.pointerId);
+  });
+
+  container.addEventListener('pointermove', function (e) {
+    if (!container.hasPointerCapture(e.pointerId)) return;
+    var dx = Math.abs(e.clientX - startX);
+    if (dx > 10) {
+      isSwiping = true;
+      e.preventDefault();
+    }
+    currentX = e.clientX;
+  });
+
+  container.addEventListener('pointerup', function (e) {
+    if (!container.hasPointerCapture(e.pointerId)) return;
+    try { container.releasePointerCapture(e.pointerId); } catch (_) {}
+    if (!isSwiping) return;
+    var diff = currentX - startX;
+    if (Math.abs(diff) > 50) {
+      if (diff < 0) galleryNext();
+      else galleryPrev();
+    }
+  });
+
+  container.addEventListener('pointercancel', function (e) {
+    if (!container.hasPointerCapture(e.pointerId)) return;
+    try { container.releasePointerCapture(e.pointerId); } catch (_) {}
+  });
+
+  _modalSwipeInitialized = true;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const modalEl = document.getElementById('productModal');
   if (!modalEl) return;
@@ -133,11 +191,16 @@ document.addEventListener('DOMContentLoaded', () => {
   modalEl.addEventListener('hidden.bs.modal', () => {
     galleryProduct = null;
     stopGalleryAutoSlide();
-    resetZoom();
   });
 
   modalEl.addEventListener('shown.bs.modal', function () {
-    // No auto-slide in product view
+    if (typeof gsap !== 'undefined') {
+      var dialog = modalEl.querySelector('.modal-dialog');
+      if (dialog) {
+        gsap.fromTo(dialog, { scale: 0.97, y: 12 }, { scale: 1, y: 0, duration: 0.25, ease: 'power2.out', overwrite: 'auto' });
+      }
+    }
+    setTimeout(initModalGallerySwipe, 100);
   });
 
   document.getElementById('modalGalleryPrev')?.addEventListener('click', galleryPrev);
